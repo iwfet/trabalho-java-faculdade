@@ -103,8 +103,22 @@ public class Garcom {
             String uuid =  UUID.randomUUID().toString().substring(0,6);
             long count = garcom.stream().filter((value) -> Objects.equals(value.getIdGarcom(), uuid)).count();
             if(count == 0){
+                System.out.println("ID garcom: "+uuid);
                 return  uuid;
             }
+        }
+    }
+
+    public void removeMesa(final Integer idMesa){
+        for(int i = 0; i < this.mesasRsponsavel.size(); i++){
+            Mesa p = this.mesasRsponsavel.get(i);
+            if(p.getIdMesa().equals(idMesa)){this.mesasRsponsavel.remove(p);break;}
+        }
+    }
+
+    public void printMesas(){
+        for (Mesa value : this.mesasRsponsavel) {
+            value.getTudoPrint();
         }
     }
 }
