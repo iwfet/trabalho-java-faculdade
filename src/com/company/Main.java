@@ -1,5 +1,6 @@
 package com.company;
 
+import enun.TipoSituacaoMesa.*;
 import molde.Garcom;
 import molde.Mesa;
 
@@ -9,11 +10,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static enun.TipoSituacaoMesa.OCUPADO;
+import static java.util.stream.Collectors.toList;
+
 
 public class Main {
 
-    private static List<Mesa> BD_Mesa = new ArrayList<>();
-    private static List<Garcom> BD_Garcom = new ArrayList<>();
+    private static List<Mesa> BD_Mesa = new ArrayList<Mesa>();
+    private static List<Garcom> BD_Garcom = new ArrayList<Garcom>();
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -44,6 +48,19 @@ public class Main {
                     relatorioMesaTodas();
                     break;
                 }
+                case 6:{
+                    relatorioGarcomMesaOcupada();
+                    break;
+                }
+
+                case 7:{
+                    buscarGarcomEmail();
+                    break;
+                }
+                case 8:{
+                    buscaGarcomResponsavelMesa();
+                    break;
+                }
 
                 case 9:{
                     cadastroGracom();
@@ -72,7 +89,10 @@ public class Main {
         System.out.println("3 - Busca mesa pelo numero");
         System.out.println("4 - Busca mesa pela capacidade de clientes");
         System.out.println("5 - Relatorio mesas");
-        System.out.println("5 - Busca mesas ocupada de X garcom");
+        System.out.println("6 - Relatorio mesas ocupadas X garcom");
+        System.out.println("7 - Busca garcom email");
+        System.out.println("8 - Busca garcom responsavel por mesa");
+
         System.out.println("9 - Cadatrar Garcom");
         System.out.println("10 - Lista Garcom");
         System.out.println("0 - Sair");
@@ -145,7 +165,51 @@ public class Main {
     }
 
     private static  void relatorioGarcomMesaOcupada(){
+        System.out.println("ID garcom");
+        var idGarcom = sc.next();
+        if(validaSeIdGarcomExiste(idGarcom)){
+             BD_Garcom.stream()
+                    .filter((value) -> Objects.equals(value.getIdGarcom(), idGarcom))
+                    .forEach((mesas) -> mesas.getMesasRsponsavel().stream()
+                                        .filter((mesa) -> mesa.getSituacao().equals(OCUPADO.getValue()))
+                                .forEach(Mesa::getTudoPrint)
+                    );
+        }else{
+            System.out.println("ID Garcom n existe");
+        }
+    }
 
+
+
+    private static void buscarGarcomEmail() {
+        System.out.println("Digite o E-mail do garçom: ");
+        String email = sc.next();
+        if(validaSeEmailGarcomExiste(email)) {
+            BD_Garcom.stream().filter((value) -> value.getEmail().equals(email))
+                    .forEach((Garcom::printGarcomIdNomeMesas));
+        }else{
+            System.out.println("Garçom com esse E-mail não cadastrado");
+        }
+
+    }
+
+
+    private static void buscaGarcomResponsavelMesa() {
+        System.out.println("Infrome numero mesa: ");
+        var mesa = sc.nextInt();
+        if (validaSeIdMesaExiste(mesa)) {
+            BD_Mesa.stream().filter(value -> value.getIdMesa().equals(mesa))
+                    .map(garcom -> garcom.getIdGarcom())
+                            .forEach((garcom)->{
+                                BD_Garcom.stream()
+                                        .filter(value->value.getIdGarcom().equals(garcom))
+                                        .forEach(garcom1 -> garcom1.printNome());
+                            });
+
+
+        } else {
+            System.out.println("Mesa nao existe");
+        }
     }
 
 
@@ -169,7 +233,6 @@ public class Main {
             } catch (ParseException e) {
                 System.out.println(e.getMessage());
             }
-
             System.out.println("Email garcom");
             final String email = sc.next();
 
@@ -193,20 +256,19 @@ public class Main {
 
 
     private static void listaGarcom(){
-        BD_Garcom.forEach((value)->{
-            System.out.println("id garcom:"+value.getIdGarcom());
-            System.out.println(value.getNome());
-//            List<Mesa> mesasRsponsavel = value.getMesasRsponsavel();
-//            mesasRsponsavel.forEach((mesa) -> System.out.println(mesa.getSituacao()));
-
-        });
-
+        BD_Garcom.forEach(Garcom::printGarcomIdNomeMesas);
 
     }
 
 
     private static boolean validaSeIdGarcomExiste( String idSuporto){
         long idgarcom = BD_Garcom.stream().filter((value) -> Objects.equals(value.getIdGarcom(), idSuporto)).count();
+        if(idgarcom== 0)return false;
+        return true;
+    }
+
+    private static boolean validaSeEmailGarcomExiste( String email){
+        long idgarcom = BD_Garcom.stream().filter((value) -> Objects.equals(value.getEmail(), email)).count();
         if(idgarcom== 0)return false;
         return true;
     }
@@ -222,10 +284,6 @@ public class Main {
         Garcom garcom1 = new Garcom(BD_Garcom, "joao", "133", new Date(), "j13", "34", "f", 20.00);
         Garcom garcom2 = new Garcom(BD_Garcom, "nuno", "565955", new Date(), "jsdfsdf13", "34", "f", 20.00);
         Garcom garcom3 = new Garcom(BD_Garcom, "fabio", "5848", new Date(), "sgdsgg", "34", "f", 20.00);
-        BD_Garcom.add(garcom1);
-        BD_Garcom.add(garcom2);
-        BD_Garcom.add(garcom3);
-
 
         Mesa mesa1 = new Mesa(1, 10, garcom2.getIdGarcom());
         Mesa mesa2 = new Mesa(2, 5, garcom1.getIdGarcom());
@@ -233,11 +291,34 @@ public class Main {
         Mesa mesa4 = new Mesa(4, 20, garcom3.getIdGarcom());
 
 
+        mesa2.setSituacao(OCUPADO);
+        garcom2.addMesaResponsavel(mesa1);
+        garcom1.addMesaResponsavel(mesa2);
+        garcom1.addMesaResponsavel(mesa3);
+        garcom3.addMesaResponsavel(mesa4);
+
+
+
+
+        BD_Garcom.add(garcom1);
+        BD_Garcom.add(garcom2);
+        BD_Garcom.add(garcom3);
+
+
         BD_Mesa.add(mesa1);
         BD_Mesa.add(mesa2);
         BD_Mesa.add(mesa3);
         BD_Mesa.add(mesa4);
+
+
+
+
+
+
+
     }
+
+
 
 
 

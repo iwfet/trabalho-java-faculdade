@@ -1,10 +1,7 @@
 package molde;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import javax.sound.midi.Soundbank;
+import java.util.*;
 
 public class Garcom {
     private String idGarcom;
@@ -15,7 +12,7 @@ public class Garcom {
     private String telefone;
     private String sexo;
     private Double salario;
-    private List<Mesa> mesasRsponsavel;
+    private List<Mesa> mesasResponsavel;
 
 
     public Garcom(List<Garcom> garcom, String nome, String cpf, Date dataNascimento, String email, String telefone, String sexo, Double salario) {
@@ -27,15 +24,16 @@ public class Garcom {
         this.telefone = telefone;
         this.sexo = sexo;
         this.salario = salario;
+        this.mesasResponsavel = new ArrayList<>();
     }
 
     public String getIdGarcom() {
-        return idGarcom;
+        return this.idGarcom;
     }
 
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public void setNome(String nome) {
@@ -43,7 +41,7 @@ public class Garcom {
     }
 
     public String getCpf() {
-        return cpf;
+        return this.cpf;
     }
 
     public void setCpf(String cpf) {
@@ -51,7 +49,7 @@ public class Garcom {
     }
 
     public Date getDataNascimento() {
-        return dataNascimento;
+        return this.dataNascimento;
     }
 
     public void setDataNascimento(Date dataNascimento) {
@@ -59,7 +57,7 @@ public class Garcom {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -67,7 +65,7 @@ public class Garcom {
     }
 
     public String getTelefone() {
-        return telefone;
+        return this.telefone;
     }
 
     public void setTelefone(String telefone) {
@@ -75,7 +73,7 @@ public class Garcom {
     }
 
     public String getSexo() {
-        return sexo;
+        return this.sexo;
     }
 
     public void setSexo(String sexo) {
@@ -83,7 +81,7 @@ public class Garcom {
     }
 
     public Double getSalario() {
-        return salario;
+        return this.salario;
     }
 
     public void setSalario(Double salario) {
@@ -91,11 +89,16 @@ public class Garcom {
     }
 
     public List<Mesa> getMesasRsponsavel() {
-        return mesasRsponsavel;
+        return this.mesasResponsavel;
     }
 
     public void setMesasRsponsavel(List<Mesa> mesasRsponsavel) {
-        this.mesasRsponsavel = mesasRsponsavel;
+        this.mesasResponsavel = mesasRsponsavel;
+    }
+
+    public void addMesaResponsavel(Mesa mesa){
+        this.mesasResponsavel.add(mesa);
+
     }
 
     private String generateIdGarcom(List<Garcom> garcom){
@@ -110,15 +113,32 @@ public class Garcom {
     }
 
     public void removeMesa(final Integer idMesa){
-        for(int i = 0; i < this.mesasRsponsavel.size(); i++){
-            Mesa p = this.mesasRsponsavel.get(i);
-            if(p.getIdMesa().equals(idMesa)){this.mesasRsponsavel.remove(p);break;}
+        for(int i = 0; i < this.mesasResponsavel.size(); i++){
+            Mesa p = this.mesasResponsavel.get(i);
+            if(p.getIdMesa().equals(idMesa)){this.mesasResponsavel.remove(p);break;}
         }
     }
 
     public void printMesas(){
-        for (Mesa value : this.mesasRsponsavel) {
+        for (Mesa value : this.mesasResponsavel) {
             value.getTudoPrint();
         }
     }
+
+    public void printGarcomIdNomeMesas(){
+        System.out.println("-----Garcom-----");
+        System.out.println("Nome: "+this.nome);
+        System.out.println("ID: "+this.idGarcom);
+        System.out.println("-----Responsavel por mesas-----\n");
+        this.printMesas();
+    }
+
+
+    public void printNome(){
+        System.out.println("-----Garcom-----");
+        System.out.println("Nome: "+this.nome);
+        System.out.println("\n");
+    }
+
+
 }
