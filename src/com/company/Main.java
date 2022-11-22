@@ -93,12 +93,6 @@ public class Main {
                     return;
             }
         }
-
-
-
-
-
-
     }
 
 
@@ -125,10 +119,8 @@ public class Main {
 
     private static void cadastroMesa(){
         System.out.println("Numero mesa");
-        int numeroMesa;
-        numeroMesa = sc.nextInt();
-        long count = BD_Mesa.stream().filter((value) -> value.getIdMesa() == numeroMesa).count();
-        if (count == 0){
+        var numeroMesa = sc.nextInt();
+        if (validaSeIdMesaExiste(numeroMesa)){
             System.out.println("ID garcom");
             var idGarcom = sc.next();
             if(validaSeIdGarcomExiste(idGarcom)){
@@ -366,8 +358,6 @@ public class Main {
         final String cpf = sc.next();
 
         Long count = BD_Garcom.stream().filter((value) -> Objects.equals(value.getCpf(), cpf)).count();
-
-        System.out.println(count);
         if(count == 0) {
             System.out.println("Dara de nascimento garcom, formato dd-MM-yyyy");
             String dataEntrada = sc.next();
@@ -443,8 +433,6 @@ public class Main {
         garcom3.addMesaResponsavel(mesa4);
 
 
-
-
         BD_Garcom.add(garcom1);
         BD_Garcom.add(garcom2);
         BD_Garcom.add(garcom3);
@@ -454,12 +442,6 @@ public class Main {
         BD_Mesa.add(mesa2);
         BD_Mesa.add(mesa3);
         BD_Mesa.add(mesa4);
-
-
-
-
-
-
 
     }
 
