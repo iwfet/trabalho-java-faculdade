@@ -7,11 +7,14 @@ import molde.Mesa;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 import static enun.TipoSituacaoMesa.LIVRE;
 import static enun.TipoSituacaoMesa.OCUPADO;
 import static enun.TipoSituacaoMesa.RESERVADO;
+import static java.util.stream.Collectors.toList;
 
 
 public class Main {
@@ -159,11 +162,9 @@ public class Main {
         System.out.println("Infrome o numero Mesa");
         int mesa = sc.nextInt();
         if(validaSeIdMesaExiste(mesa)){
-            BD_Mesa.forEach((value)->{
-                if (value.getIdMesa() == mesa) {
-                    value.getTudoPrint();
-                }
-            });
+            BD_Mesa.stream()
+                    .filter(valur->valur.getIdMesa().equals(mesa))
+                    .forEach(Mesa::getTudoPrint);
         }else{
             System.out.println("Mesa não existe");
         }
@@ -172,11 +173,9 @@ public class Main {
     private static void buscaMesaCapacidade(){
         System.out.println("Informe a capacidade de clienets em Mesa");
         int capaciade = sc.nextInt();
-        BD_Mesa.forEach((value)->{
-            if (value.getMaxCap() >= capaciade) {
-                value.getTudoPrint();
-            }
-        });
+        BD_Mesa.stream()
+                .filter(value->value.getMaxCap()>= capaciade)
+                .forEach(Mesa::getTudoPrint);
     }
 
 
@@ -190,10 +189,22 @@ public class Main {
         if(validaSeIdGarcomExiste(idGarcom)){
              BD_Garcom.stream()
                     .filter((value) -> Objects.equals(value.getIdGarcom(), idGarcom))
-                    .forEach((mesas) -> mesas.getMesasRsponsavel().stream()
-                                        .filter((mesa) -> mesa.getSituacao().equals(OCUPADO.getValue()))
-                                .forEach(Mesa::getTudoPrint)
-                    );
+                    .forEach((mesas) -> {
+                        final List<Mesa> mesasResponsavel = mesas.getMesasRsponsavel();
+                        if (mesasResponsavel.size()!=0){
+                            final var listMesas = mesasResponsavel
+                                    .stream()
+                                    .filter((mesa) -> mesa.getSituacao().equals(OCUPADO.getValue()))
+                                    .collect(toList());
+                            if(listMesas.size()!= 0){
+                                listMesas.forEach(Mesa::getTudoPrint);
+                            }else {
+                                System.out.println("Garcom n tem mesas ocupada");
+                            }
+                        }else {
+                            System.out.println("Garcom n tem mesas cadastrada para ele");
+                        }
+                    });
         }else{
             System.out.println("ID Garcom n existe");
         }
@@ -219,11 +230,11 @@ public class Main {
         var mesa = sc.nextInt();
         if (validaSeIdMesaExiste(mesa)) {
             BD_Mesa.stream().filter(value -> value.getIdMesa().equals(mesa))
-                    .map(garcom -> garcom.getIdGarcom())
+                    .map(Mesa::getIdGarcom)
                             .forEach((garcom)->{
                                 BD_Garcom.stream()
                                         .filter(value->value.getIdGarcom().equals(garcom))
-                                        .forEach(garcom1 -> garcom1.printNome());
+                                        .forEach(Garcom::printNome);
                             });
         } else {
             System.out.println("Mesa nao existe");
@@ -261,10 +272,9 @@ public class Main {
                     break;
                 }
             }
-            for(int i = 0; i < BD_Mesa.size(); i++){
-                Mesa mesa = BD_Mesa.get(i);
-                if(mesa.getIdGarcom().equals(idGarcom)){
-                    BD_Mesa.get(i).setIdGarcom(null);
+            for (Mesa mesa : BD_Mesa) {
+                if (mesa.getIdGarcom().equals(idGarcom)) {
+                    mesa.setIdGarcom(null);
                 }
             }
             System.out.println("Garcom removido com sucesso");
@@ -377,7 +387,7 @@ public class Main {
             System.out.println("Sexo garcom");
             final String sexo = sc.next();
 
-            System.out.println("Salario garcom");
+            System.out.println("Salario garcom XX,XX");
             double salario = sc.nextDouble();
 
             BD_Garcom.add(new Garcom(BD_Garcom,nomeGarcom,cpf,date,email,telefone,sexo,salario));
@@ -397,22 +407,17 @@ public class Main {
 
 
     private static boolean validaSeIdGarcomExiste( String idSuporto){
-        long idgarcom = BD_Garcom.stream().filter((value) -> Objects.equals(value.getIdGarcom(), idSuporto)).count();
-        if(idgarcom== 0)return false;
-        return true;
+       return BD_Garcom.stream().anyMatch(value -> Objects.equals(value.getIdGarcom(), idSuporto));
     }
 
     private static boolean validaSeEmailGarcomExiste( String email){
-        long idgarcom = BD_Garcom.stream().filter((value) -> Objects.equals(value.getEmail(), email)).count();
-        if(idgarcom== 0)return false;
-        return true;
+        return BD_Garcom.stream().anyMatch((value) -> Objects.equals(value.getEmail(), email));
+
     }
 
 
     private static boolean validaSeIdMesaExiste( Integer idSuporto){
-        long idgarcom = BD_Mesa.stream().filter((value) -> Objects.equals(value.getIdMesa(), idSuporto)).count();
-        if(idgarcom== 0)return false;
-        return true;
+        return BD_Mesa.stream().anyMatch((value) -> Objects.equals(value.getIdMesa(), idSuporto));
     }
 
     private static void start(){
