@@ -1,9 +1,9 @@
 package enun;
 
 public enum TipoSexo {
-    MASCULINO("LIVRE","livre"),
+    MASCULINO("MASCULINO","masculino"),
 
-    FEMININO("OCUPADO","ocupado")
+    FEMININO("FEMININO","femino")
     ;
 
     private final String descricao;

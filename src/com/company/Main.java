@@ -1,6 +1,7 @@
 package com.company;
 
 
+import enun.TipoSexo;
 import molde.Garcom;
 import molde.Mesa;
 
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+import static enun.TipoSexo.FEMININO;
+import static enun.TipoSexo.MASCULINO;
 import static enun.TipoSituacaoMesa.LIVRE;
 import static enun.TipoSituacaoMesa.OCUPADO;
 import static enun.TipoSituacaoMesa.RESERVADO;
@@ -137,7 +140,6 @@ public class Main {
             }else{
                 System.out.println("ID Garcom n existe");
             }
-
         }else{
             System.out.println("Numero mesa já sendo utilizada");
         }
@@ -385,13 +387,24 @@ public class Main {
             final String telefone = sc.next();
 
             System.out.println("Sexo garcom");
-            final String sexo = sc.next();
+            System.out.println("1 - Masculino");
+            System.out.println("2 - Feminino");
+            final var value = sc.nextInt();
+            TipoSexo sexo = null;
+            if(value==1){
+                sexo=MASCULINO;
+            }else if(value ==2){
+                sexo=FEMININO;
+            }
+            if(sexo != null) {
+                System.out.println("Salario garcom XX,XX");
+                double salario = sc.nextDouble();
 
-            System.out.println("Salario garcom XX,XX");
-            double salario = sc.nextDouble();
-
-            BD_Garcom.add(new Garcom(BD_Garcom,nomeGarcom,cpf,date,email,telefone,sexo,salario));
-            System.out.println("Cadastrado garcom \n");
+                BD_Garcom.add(new Garcom(BD_Garcom, nomeGarcom, cpf, date, email, telefone, sexo, salario));
+                System.out.println("Cadastrado garcom \n");
+            }else{
+                System.out.println("Erro ao cadastar sexo n valido");
+            }
         }else{
             System.out.println("garcom já exite com este cpf");
         }
@@ -422,9 +435,9 @@ public class Main {
 
     private static void start(){
         System.out.println("-----Garcom ja cadastrados no sistema-----");
-        Garcom garcom1 = new Garcom(BD_Garcom, "joao", "133", new Date(), "j13", "34", "f", 20.00);
-        Garcom garcom2 = new Garcom(BD_Garcom, "nuno", "565955", new Date(), "jsdfsdf13", "34", "f", 20.00);
-        Garcom garcom3 = new Garcom(BD_Garcom, "fabio", "5848", new Date(), "sgdsgg", "34", "f", 20.00);
+        Garcom garcom1 = new Garcom(BD_Garcom, "joao", "133", new Date(), "j13", "34", MASCULINO, 20.00);
+        Garcom garcom2 = new Garcom(BD_Garcom, "nuno", "565955", new Date(), "jsdfsdf13", "34", MASCULINO, 20.00);
+        Garcom garcom3 = new Garcom(BD_Garcom, "fabio", "5848", new Date(), "sgdsgg", "34", MASCULINO, 20.00);
 
         Mesa mesa1 = new Mesa(1, 10, garcom2.getIdGarcom());
         Mesa mesa2 = new Mesa(2, 5, garcom1.getIdGarcom());
@@ -450,9 +463,5 @@ public class Main {
         BD_Mesa.add(mesa4);
 
     }
-
-
-
-
 
 }

@@ -1,5 +1,7 @@
 package molde;
 
+import enun.TipoSexo;
+
 import javax.sound.midi.Soundbank;
 import java.util.*;
 
@@ -10,12 +12,12 @@ public class Garcom {
     private Date dataNascimento;
     private String email;
     private String telefone;
-    private String sexo;
+    private TipoSexo sexo;
     private Double salario;
     private List<Mesa> mesasResponsavel;
 
 
-    public Garcom(List<Garcom> garcom, String nome, String cpf, Date dataNascimento, String email, String telefone, String sexo, Double salario) {
+    public Garcom(List<Garcom> garcom, String nome, String cpf, Date dataNascimento, String email, String telefone, TipoSexo sexo, Double salario) {
         this.idGarcom = generateIdGarcom(garcom);
         this.nome = nome;
         this.cpf = cpf;
@@ -73,10 +75,10 @@ public class Garcom {
     }
 
     public String getSexo() {
-        return this.sexo;
+        return this.sexo.getValue();
     }
 
-    public void setSexo(String sexo) {
+    public void setSexo(TipoSexo sexo) {
         this.sexo = sexo;
     }
 
