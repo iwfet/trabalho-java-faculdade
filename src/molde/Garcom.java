@@ -140,5 +140,10 @@ public class Garcom {
         System.out.println("\n");
     }
 
+    public void relaotorioGarcom(){
+        System.out.println("Numeros de Mesas responsavel: "+this.mesasResponsavel.size());
+        this.printMesas();
+    }
+
 
 }

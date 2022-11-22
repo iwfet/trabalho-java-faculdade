@@ -51,6 +51,10 @@ public class Mesa {
         this.idGarcom = idGarcom;
     }
 
+    public void setIdGarcom(String idGarcom) {
+        this.idGarcom = idGarcom;
+    }
+
     public void getTudoPrint(){
         System.out.println("---------MESA---------");
         System.out.println("ID garcom: "+this.idGarcom);
@@ -58,4 +62,15 @@ public class Mesa {
         System.out.println("Situaçao: "+this.situacao.getValue());
         System.out.println("\n");
     }
+
+    public void printDadosMaisGarcom(String nome){
+        System.out.println("---------MESA---------");
+        System.out.println("ID garcom: "+this.idGarcom);
+        System.out.println("Nome garcom: "+nome);
+        System.out.println("Capadidade maxima: "+this.maxCap);
+        System.out.println("Situaçao: "+this.situacao.getValue());
+        System.out.println("\n");
+
+    }
+
 }
