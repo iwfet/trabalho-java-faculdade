@@ -1,22 +1,22 @@
+/*
+ * Participantes:
+ * Wanderson da Silva Junior RA: 202217583
+ * Geovana Oliveira RA:202218173
+ *  Fábio Henrique Farias da Silva RA: 202218886
+ * João Vitor Vieira Claro RA:20221697
+ */
+
 package com.company;
 
-
 import enun.TipoSexo;
+import enun.TipoSituacaoMesa;
 import molde.Garcom;
 import molde.Mesa;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-
-import static enun.TipoSexo.FEMININO;
-import static enun.TipoSexo.MASCULINO;
-import static enun.TipoSituacaoMesa.LIVRE;
-import static enun.TipoSituacaoMesa.OCUPADO;
-import static enun.TipoSituacaoMesa.RESERVADO;
 import static java.util.stream.Collectors.toList;
 
 
@@ -196,7 +196,7 @@ public class Main {
                         if (mesasResponsavel.size()!=0){
                             final var listMesas = mesasResponsavel
                                     .stream()
-                                    .filter((mesa) -> mesa.getSituacao().equals(OCUPADO.getValue()))
+                                    .filter((mesa) -> mesa.getSituacao().equals(TipoSituacaoMesa.OCUPADO.getValue()))
                                     .collect(toList());
                             if(listMesas.size()!= 0){
                                 listMesas.forEach(Mesa::getTudoPrint);
@@ -298,12 +298,12 @@ public class Main {
                     BD_Mesa.stream()
                             .filter(value->value.getIdMesa().equals(mesa))
                             .forEach(mesas -> {
-                                mesas.setSituacao(LIVRE);
+                                mesas.setSituacao(TipoSituacaoMesa.LIVRE);
                                 BD_Garcom.stream()
                                         .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
                                         .forEach(garcom -> garcom.getMesasRsponsavel()
                                                 .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
-                                                .forEach(value->value.setSituacao(LIVRE))
+                                                .forEach(value->value.setSituacao(TipoSituacaoMesa.LIVRE))
                                         );
                             });
                     break;
@@ -312,12 +312,12 @@ public class Main {
                     BD_Mesa.stream()
                             .filter(value->value.getIdMesa().equals(mesa))
                             .forEach(mesas -> {
-                                mesas.setSituacao(OCUPADO);
+                                mesas.setSituacao(TipoSituacaoMesa.OCUPADO);
                                 BD_Garcom.stream()
                                         .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
                                         .forEach(garcom -> garcom.getMesasRsponsavel()
                                                 .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
-                                                .forEach(value->value.setSituacao(OCUPADO))
+                                                .forEach(value->value.setSituacao(TipoSituacaoMesa.OCUPADO))
                                         );
                             });
                     break;
@@ -326,12 +326,12 @@ public class Main {
                     BD_Mesa.stream()
                             .filter(value->value.getIdMesa().equals(mesa))
                             .forEach(mesas -> {
-                                mesas.setSituacao(RESERVADO);
+                                mesas.setSituacao(TipoSituacaoMesa.RESERVADO);
                                 BD_Garcom.stream()
                                         .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
                                         .forEach(garcom -> garcom.getMesasRsponsavel()
                                                 .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
-                                                .forEach(value->value.setSituacao(RESERVADO))
+                                                .forEach(value->value.setSituacao(TipoSituacaoMesa.RESERVADO))
                                         );
                             });
                     break;
@@ -353,7 +353,7 @@ public class Main {
 
 
     private static  void relatorioMesaLivreEGarcom() {
-        BD_Mesa.stream().filter(value->value.getSituacao().equals(LIVRE.getValue()))
+        BD_Mesa.stream().filter(value->value.getSituacao().equals(TipoSituacaoMesa.LIVRE.getValue()))
                 .forEach(mesa -> {
                     BD_Garcom.stream().filter(value->value.getIdGarcom().equals(mesa.getIdGarcom()))
                             .forEach(garcom -> {
@@ -392,9 +392,9 @@ public class Main {
             final var value = sc.nextInt();
             TipoSexo sexo = null;
             if(value==1){
-                sexo=MASCULINO;
+                sexo=TipoSexo.MASCULINO;
             }else if(value ==2){
-                sexo=FEMININO;
+                sexo=TipoSexo.FEMININO;
             }
             if(sexo != null) {
                 System.out.println("Salario garcom XX,XX");
@@ -435,9 +435,9 @@ public class Main {
 
     private static void start(){
         System.out.println("-----Garcom ja cadastrados no sistema-----");
-        Garcom garcom1 = new Garcom(BD_Garcom, "joao", "133", new Date(), "j13", "34", MASCULINO, 20.00);
-        Garcom garcom2 = new Garcom(BD_Garcom, "nuno", "565955", new Date(), "jsdfsdf13", "34", MASCULINO, 20.00);
-        Garcom garcom3 = new Garcom(BD_Garcom, "fabio", "5848", new Date(), "sgdsgg", "34", MASCULINO, 20.00);
+        Garcom garcom1 = new Garcom(BD_Garcom, "joao", "133", new Date(), "j13", "34", TipoSexo.MASCULINO, 20.00);
+        Garcom garcom2 = new Garcom(BD_Garcom, "nuno", "565955", new Date(), "jsdfsdf13", "34", TipoSexo.MASCULINO, 20.00);
+        Garcom garcom3 = new Garcom(BD_Garcom, "fabio", "5848", new Date(), "sgdsgg", "34", TipoSexo.MASCULINO, 20.00);
 
         Mesa mesa1 = new Mesa(1, 10, garcom2.getIdGarcom());
         Mesa mesa2 = new Mesa(2, 5, garcom1.getIdGarcom());
@@ -445,7 +445,7 @@ public class Main {
         Mesa mesa4 = new Mesa(4, 20, garcom3.getIdGarcom());
 
 
-        mesa2.setSituacao(OCUPADO);
+        mesa2.setSituacao(TipoSituacaoMesa.OCUPADO);
         garcom2.addMesaResponsavel(mesa1);
         garcom1.addMesaResponsavel(mesa2);
         garcom1.addMesaResponsavel(mesa3);
