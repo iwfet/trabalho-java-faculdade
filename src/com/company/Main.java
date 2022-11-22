@@ -11,7 +11,7 @@ import java.util.*;
 
 import static enun.TipoSituacaoMesa.LIVRE;
 import static enun.TipoSituacaoMesa.OCUPADO;
-
+import static enun.TipoSituacaoMesa.RESERVADO;
 
 
 public class Main {
@@ -290,6 +290,48 @@ public class Main {
             System.out.print("\nEntre com a operação desejada:");
             var operacao = sc.nextInt();
             switch (operacao) {
+                case 1:{
+                    BD_Mesa.stream()
+                            .filter(value->value.getIdMesa().equals(mesa))
+                            .forEach(mesas -> {
+                                mesas.setSituacao(LIVRE);
+                                BD_Garcom.stream()
+                                        .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
+                                        .forEach(garcom -> garcom.getMesasRsponsavel()
+                                                .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
+                                                .forEach(value->value.setSituacao(LIVRE))
+                                        );
+                            });
+                    break;
+                }
+                case 2:{
+                    BD_Mesa.stream()
+                            .filter(value->value.getIdMesa().equals(mesa))
+                            .forEach(mesas -> {
+                                mesas.setSituacao(OCUPADO);
+                                BD_Garcom.stream()
+                                        .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
+                                        .forEach(garcom -> garcom.getMesasRsponsavel()
+                                                .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
+                                                .forEach(value->value.setSituacao(OCUPADO))
+                                        );
+                            });
+                    break;
+                }
+                case 3:{
+                    BD_Mesa.stream()
+                            .filter(value->value.getIdMesa().equals(mesa))
+                            .forEach(mesas -> {
+                                mesas.setSituacao(RESERVADO);
+                                BD_Garcom.stream()
+                                        .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
+                                        .forEach(garcom -> garcom.getMesasRsponsavel()
+                                                .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
+                                                .forEach(value->value.setSituacao(RESERVADO))
+                                        );
+                            });
+                    break;
+                }
 
             }
             }else {

@@ -58,6 +58,7 @@ public class Mesa {
     public void getTudoPrint(){
         System.out.println("---------MESA---------");
         System.out.println("ID garcom: "+this.idGarcom);
+        System.out.println("Numero mesa: "+this.idMesa);
         System.out.println("Capadidade maxima: "+this.maxCap);
         System.out.println("Situaçao: "+this.situacao.getValue());
         System.out.println("\n");
@@ -67,6 +68,7 @@ public class Mesa {
         System.out.println("---------MESA---------");
         System.out.println("ID garcom: "+this.idGarcom);
         System.out.println("Nome garcom: "+nome);
+        System.out.println("Numero mesa: "+this.idMesa);
         System.out.println("Capadidade maxima: "+this.maxCap);
         System.out.println("Situaçao: "+this.situacao.getValue());
         System.out.println("\n");
