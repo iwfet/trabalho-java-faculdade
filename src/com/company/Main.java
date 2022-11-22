@@ -16,8 +16,8 @@ import static enun.TipoSituacaoMesa.RESERVADO;
 
 public class Main {
 
-    private static List<Mesa> BD_Mesa = new ArrayList<Mesa>();
-    private static List<Garcom> BD_Garcom = new ArrayList<Garcom>();
+    private static List<Mesa> BD_Mesa = new ArrayList<>();
+    private static List<Garcom> BD_Garcom = new ArrayList<>();
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -357,7 +357,7 @@ public class Main {
         System.out.println("CPF garcom");
         final String cpf = sc.next();
 
-        Long count = BD_Garcom.stream().filter((value) -> Objects.equals(value.getCpf(), cpf)).count();
+        var count = BD_Garcom.stream().filter((value) -> Objects.equals(value.getCpf(), cpf)).count();
         if(count == 0) {
             System.out.println("Dara de nascimento garcom, formato dd-MM-yyyy");
             String dataEntrada = sc.next();
@@ -416,6 +416,7 @@ public class Main {
     }
 
     private static void start(){
+        System.out.println("-----Garcom ja cadastrados no sistema-----");
         Garcom garcom1 = new Garcom(BD_Garcom, "joao", "133", new Date(), "j13", "34", "f", 20.00);
         Garcom garcom2 = new Garcom(BD_Garcom, "nuno", "565955", new Date(), "jsdfsdf13", "34", "f", 20.00);
         Garcom garcom3 = new Garcom(BD_Garcom, "fabio", "5848", new Date(), "sgdsgg", "34", "f", 20.00);

@@ -129,7 +129,7 @@ public class Garcom {
         System.out.println("-----Garcom-----");
         System.out.println("Nome: "+this.nome);
         System.out.println("ID: "+this.idGarcom);
-        System.out.println("-----Responsavel por mesas-----\n");
+        System.out.println("-----Responsavel por mesas-----");
         this.printMesas();
     }
 
