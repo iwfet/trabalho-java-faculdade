@@ -135,7 +135,7 @@ public class Main {
     private static void cadastroMesa(){
         System.out.println("Numero mesa");
         var numeroMesa = sc.nextInt();
-        if (validaSeIdMesaExiste(numeroMesa)){
+        if (!validaSeIdMesaExiste(numeroMesa)){
             System.out.println("ID garcom");
             var idGarcom = sc.next();
             if(validaSeIdGarcomExiste(idGarcom)){
