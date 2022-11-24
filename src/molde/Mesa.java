@@ -5,7 +5,7 @@ import enun.TipoSituacaoMesa;
 import static enun.TipoSituacaoMesa.LIVRE;
 
 public class Mesa {
-    private Integer idMesa;
+    final private Integer idMesa;
     private TipoSituacaoMesa situacao;
     private Integer maxCap;
     private String idGarcom;
@@ -21,10 +21,6 @@ public class Mesa {
 
     public Integer getIdMesa() {
         return idMesa;
-    }
-
-    public void setIdMesa(Integer idMes) {
-        this.idMesa = idMes;
     }
 
     public String getSituacao() {

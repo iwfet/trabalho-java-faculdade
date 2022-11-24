@@ -81,16 +81,23 @@ public class Main {
                     atualizaSituacaoMesa();
                     break;
                 }
-
                 case 12:{
-                    relatorioMesaLivreEGarcom();
+                    atualizaCapacidadeMesa();
                     break;
                 }
                 case 13:{
-                    cadastroGracom();
+                    atualizaGarcomMesa();
                     break;
                 }
                 case 14:{
+                    relatorioMesaLivreEGarcom();
+                    break;
+                }
+                case 15:{
+                    cadastroGracom();
+                    break;
+                }
+                case 16:{
                     listaGarcom();
                     break;
                 }
@@ -117,9 +124,11 @@ public class Main {
         System.out.println("9 - Relatorio mesas garcom ");
         System.out.println("10 - Remove garcom ID");
         System.out.println("11 - Atualiza situaçao mesa");
-        System.out.println("12 - Relatorio mesas livre");
-        System.out.println("13 - Cadatrar Garcom");
-        System.out.println("14 - Lista Garcom");
+        System.out.println("12 - Atualiza capacidade mesa");
+        System.out.println("13 - Atualiza garcom mesa");
+        System.out.println("14 - Relatorio mesas livre");
+        System.out.println("15 - Cadatrar Garcom");
+        System.out.println("16 - Lista Garcom");
         System.out.println("0 - Sair");
     }
 
@@ -295,45 +304,18 @@ public class Main {
             var operacao = sc.nextInt();
             switch (operacao) {
                 case 1:{
-                    BD_Mesa.stream()
-                            .filter(value->value.getIdMesa().equals(mesa))
-                            .forEach(mesas -> {
-                                mesas.setSituacao(TipoSituacaoMesa.LIVRE);
-                                BD_Garcom.stream()
-                                        .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
-                                        .forEach(garcom -> garcom.getMesasRsponsavel()
-                                                .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
-                                                .forEach(value->value.setSituacao(TipoSituacaoMesa.LIVRE))
-                                        );
-                            });
+                    atualizarTipoSituacaoMesa(TipoSituacaoMesa.LIVRE,mesa);
+                    System.out.println("Finalizado");
                     break;
                 }
                 case 2:{
-                    BD_Mesa.stream()
-                            .filter(value->value.getIdMesa().equals(mesa))
-                            .forEach(mesas -> {
-                                mesas.setSituacao(TipoSituacaoMesa.OCUPADO);
-                                BD_Garcom.stream()
-                                        .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
-                                        .forEach(garcom -> garcom.getMesasRsponsavel()
-                                                .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
-                                                .forEach(value->value.setSituacao(TipoSituacaoMesa.OCUPADO))
-                                        );
-                            });
+                    atualizarTipoSituacaoMesa(TipoSituacaoMesa.OCUPADO,mesa);
+                    System.out.println("Finalizado");
                     break;
                 }
                 case 3:{
-                    BD_Mesa.stream()
-                            .filter(value->value.getIdMesa().equals(mesa))
-                            .forEach(mesas -> {
-                                mesas.setSituacao(TipoSituacaoMesa.RESERVADO);
-                                BD_Garcom.stream()
-                                        .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
-                                        .forEach(garcom -> garcom.getMesasRsponsavel()
-                                                .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
-                                                .forEach(value->value.setSituacao(TipoSituacaoMesa.RESERVADO))
-                                        );
-                            });
+                    atualizarTipoSituacaoMesa(TipoSituacaoMesa.RESERVADO,mesa);
+                    System.out.println("Finalizado");
                     break;
                 }
 
@@ -343,6 +325,64 @@ public class Main {
         }
 
     }
+    private static void atualizaCapacidadeMesa() {
+        System.out.println("Infrome numero mesa: ");
+        var mesa = sc.nextInt();
+        if (validaSeIdMesaExiste(mesa)) {
+            System.out.println("Informe o nova capaciade mesa");
+            final var capaciadade = sc.nextInt();
+            BD_Mesa.stream()
+                    .filter(value->value.getIdMesa().equals(mesa))
+                    .forEach(mesas -> {
+                        mesas.setMaxCap(capaciadade);
+                        BD_Garcom.stream()
+                                .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
+                                .forEach(garcom -> garcom.getMesasRsponsavel()
+                                        .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
+                                        .forEach(value->value.setMaxCap(capaciadade))
+                                );
+                    });
+            System.out.println("Finalizado");
+        }else {
+            System.out.println("Mesa nao existe");
+        }
+    }
+
+
+    private static void atualizaGarcomMesa() {
+        System.out.println("Infrome numero mesa: ");
+        var mesa = sc.nextInt();
+        if (validaSeIdMesaExiste(mesa)) {
+            System.out.println("ID garcom novo");
+            var idGarcom = sc.next();
+            if(validaSeIdGarcomExiste(idGarcom)){
+                BD_Mesa.stream()
+                        .filter(value->value.getIdMesa().equals(mesa))
+                        .forEach(mesas -> {
+                            final String garcomAntigo = mesas.getIdGarcom();
+                            mesas.setIdGarcom(idGarcom);
+                            BD_Garcom.stream()
+                                    .filter(value->value.getIdGarcom().equals(garcomAntigo))
+                                    .forEach(garcom -> garcom.removeMesa(mesas.getIdMesa())
+                                    );
+
+                            BD_Garcom.stream()
+                                    .filter(value->value.getIdGarcom().equals(idGarcom))
+                                    .forEach(garcom-> garcom.addMesaResponsavel(mesas));
+                        });
+                System.out.println("Finalizado");
+            }else{
+                System.out.println("Garçom não existe");
+            }
+        }else {
+            System.out.println("Mesa nao existe");
+        }
+
+
+    }
+
+
+
 
     private static void mostraMineMenu() {
         System.out.println("Deseja atualizar q tipo de siatucao Mesa:");
@@ -361,6 +401,7 @@ public class Main {
                             });
                 });
     }
+
 
     private static void cadastroGracom(){
         System.out.println("Nome garcom");
@@ -412,10 +453,23 @@ public class Main {
 
     }
 
+    private static void atualizarTipoSituacaoMesa(final TipoSituacaoMesa situacao, final Integer mesa){
+        BD_Mesa.stream()
+                .filter(value->value.getIdMesa().equals(mesa))
+                .forEach(mesas -> {
+                    mesas.setSituacao(situacao);
+                    BD_Garcom.stream()
+                            .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
+                            .forEach(garcom -> garcom.getMesasRsponsavel()
+                                    .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
+                                    .forEach(value->value.setSituacao(situacao))
+                            );
+                });
+
+    }
 
     private static void listaGarcom(){
         BD_Garcom.forEach(Garcom::printGarcomIdNomeMesas);
-
     }
 
 
