@@ -263,7 +263,7 @@ public class Main {
                 .forEach(Garcom::relaotorioGarcom);
 
         }else {
-            System.out.println("Mesa nao existe");
+            System.out.println("ID garcom nao existe");
         }
 
     }
@@ -272,7 +272,7 @@ public class Main {
 
     private static void removerGarcom() {
         System.out.println("ID garcom");
-        var idGarcom = sc.next();
+        final var idGarcom = sc.next();
         if(validaSeIdGarcomExiste(idGarcom)){
             for(int i = 0; i < BD_Garcom.size(); i++){
                 Garcom p = BD_Garcom.get(i);
@@ -281,11 +281,8 @@ public class Main {
                     break;
                 }
             }
-            for (Mesa mesa : BD_Mesa) {
-                if (mesa.getIdGarcom().equals(idGarcom)) {
-                    mesa.setIdGarcom(null);
-                }
-            }
+            BD_Mesa.stream().filter(value->value.getIdGarcom().equals(idGarcom))
+                    .forEach(mesa -> mesa.setIdGarcom("Sem garcom"));
             System.out.println("Garcom removido com sucesso");
         }else{
             System.out.println("Garçom não existe");
