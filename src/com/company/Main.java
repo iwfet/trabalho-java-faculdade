@@ -242,11 +242,9 @@ public class Main {
         if (validaSeIdMesaExiste(mesa)) {
             BD_Mesa.stream().filter(value -> value.getIdMesa().equals(mesa))
                     .map(Mesa::getIdGarcom)
-                            .forEach((garcom)->{
-                                BD_Garcom.stream()
-                                        .filter(value->value.getIdGarcom().equals(garcom))
-                                        .forEach(Garcom::printNome);
-                            });
+                            .forEach(garcom-> BD_Garcom.stream()
+                                    .filter(value->value.getIdGarcom().equals(garcom))
+                                    .forEach(Garcom::printNome));
         } else {
             System.out.println("Mesa nao existe");
         }
@@ -394,12 +392,8 @@ public class Main {
 
     private static  void relatorioMesaLivreEGarcom() {
         BD_Mesa.stream().filter(value->value.getSituacao().equals(TipoSituacaoMesa.LIVRE.getValue()))
-                .forEach(mesa -> {
-                    BD_Garcom.stream().filter(value->value.getIdGarcom().equals(mesa.getIdGarcom()))
-                            .forEach(garcom -> {
-                                mesa.printDadosMaisGarcom(garcom.getNome());
-                            });
-                });
+                .forEach(mesa -> BD_Garcom.stream().filter(value->value.getIdGarcom().equals(mesa.getIdGarcom()))
+                        .forEach(garcom -> mesa.printDadosMaisGarcom(garcom.getNome())));
     }
 
 
