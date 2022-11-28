@@ -6,7 +6,7 @@ import javax.sound.midi.Soundbank;
 import java.util.*;
 
 public class Garcom {
-    private String idGarcom;
+    private final String idGarcom;
     private String nome;
     private String cpf;
     private Date dataNascimento;
@@ -90,11 +90,11 @@ public class Garcom {
         this.salario = salario;
     }
 
-    public List<Mesa> getMesasRsponsavel() {
+    public List<Mesa> getMesasResponsavel() {
         return this.mesasResponsavel;
     }
 
-    public void setMesasRsponsavel(List<Mesa> mesasRsponsavel) {
+    public void setMesasResponsavel(List<Mesa> mesasRsponsavel) {
         this.mesasResponsavel = mesasRsponsavel;
     }
 
@@ -142,7 +142,7 @@ public class Garcom {
         System.out.println("\n");
     }
 
-    public void relaotorioGarcom(){
+    public void relatorioGarcom(){
         System.out.println("Numeros de Mesas responsavel: "+this.mesasResponsavel.size());
         this.printMesas();
     }

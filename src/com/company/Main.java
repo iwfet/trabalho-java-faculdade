@@ -201,7 +201,7 @@ public class Main {
              BD_Garcom.stream()
                     .filter((value) -> Objects.equals(value.getIdGarcom(), idGarcom))
                     .forEach((mesas) -> {
-                        final List<Mesa> mesasResponsavel = mesas.getMesasRsponsavel();
+                        final List<Mesa> mesasResponsavel = mesas.getMesasResponsavel();
                         if (mesasResponsavel.size()!=0){
                             final var listMesas = mesasResponsavel
                                     .stream()
@@ -260,7 +260,7 @@ public class Main {
         if(validaSeIdGarcomExiste(idGarcom)){
         BD_Garcom.stream()
                 .filter(value->value.getIdGarcom().equals(idGarcom))
-                .forEach(Garcom::relaotorioGarcom);
+                .forEach(Garcom::relatorioGarcom);
 
         }else {
             System.out.println("ID garcom nao existe");
@@ -332,7 +332,7 @@ public class Main {
                         mesas.setMaxCap(capaciadade);
                         BD_Garcom.stream()
                                 .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
-                                .forEach(garcom -> garcom.getMesasRsponsavel()
+                                .forEach(garcom -> garcom.getMesasResponsavel()
                                         .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
                                         .forEach(value->value.setMaxCap(capaciadade))
                                 );
@@ -451,7 +451,7 @@ public class Main {
                     mesas.setSituacao(situacao);
                     BD_Garcom.stream()
                             .filter(value->value.getIdGarcom().equals(mesas.getIdGarcom()))
-                            .forEach(garcom -> garcom.getMesasRsponsavel()
+                            .forEach(garcom -> garcom.getMesasResponsavel()
                                     .stream().filter(value->value.getIdMesa().equals(mesas.getIdMesa()))
                                     .forEach(value->value.setSituacao(situacao))
                             );

@@ -43,9 +43,6 @@ public class Mesa {
         return idGarcom;
     }
 
-    public void String (String idGarcom) {
-        this.idGarcom = idGarcom;
-    }
 
     public void setIdGarcom(String idGarcom) {
         this.idGarcom = idGarcom;
