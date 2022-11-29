@@ -73,31 +73,36 @@ public class Main {
                     break;
                 }
                 case 10:{
+                    relatorioMesaLivreEGarcom();
+                    break;
+                }
+                case 11:{
+                    relatorioQuantidadeMesaGarcons();
+                    break;
+                }
+                case 12:{
                     removerGarcom();
                     break;
                 }
 
-                case 11:{
+                case 13:{
                     atualizaSituacaoMesa();
                     break;
                 }
-                case 12:{
+                case 14:{
                     atualizaCapacidadeMesa();
                     break;
                 }
-                case 13:{
+                case 15:{
                     atualizaGarcomMesa();
                     break;
                 }
-                case 14:{
-                    relatorioMesaLivreEGarcom();
-                    break;
-                }
-                case 15:{
+
+                case 16:{
                     cadastroGracom();
                     break;
                 }
-                case 16:{
+                case 17:{
                     listaGarcom();
                     break;
                 }
@@ -113,22 +118,23 @@ public class Main {
 
     private static void mostraMenu() {
         System.out.println("O que deseja fazer:");
-        System.out.println("1 - Cadatrar Mesa");
-        System.out.println("2 - Remove Mesa");
-        System.out.println("3 - Busca mesa pelo numero");
-        System.out.println("4 - Relatorio mesa pela capacidade de clientes");
-        System.out.println("5 - Relatorio mesas");
-        System.out.println("6 - Relatorio mesas ocupadas X garcom");
-        System.out.println("7 - Busca garcom email");
-        System.out.println("8 - Busca garcom responsavel por mesa");
-        System.out.println("9 - Relatorio mesas garcom ");
-        System.out.println("10 - Remove garcom ID");
-        System.out.println("11 - Atualiza situaçao mesa");
-        System.out.println("12 - Atualiza capacidade mesa");
-        System.out.println("13 - Atualiza garcom mesa");
-        System.out.println("14 - Relatorio mesas livre");
-        System.out.println("15 - Cadatrar Garcom");
-        System.out.println("16 - Lista Garcom");
+        System.out.println("1 - Realizar cadastro Mesa");
+        System.out.println("2 - Realizar a exclusão de mesa");
+        System.out.println("3 - Buscar uma mesa pelo número ");
+        System.out.println("4 - Relatório com todas as mesas com a capacidade >= a uma dada quantidade de clientes ");
+        System.out.println("5 - Relatório com todas as mesas");
+        System.out.println("6 - Relatório com todas as mesas que um garçom atende e que estão ocupadas");
+        System.out.println("7 - Buscar garçom pelo e-mail");
+        System.out.println("8 - Busca nome do garçom responsável por uma dada mesa");
+        System.out.println("9 - Relatório com todas as mesas que um garçom atende");
+        System.out.println("10 - Relatório com todas as mesas livres e o nome do garçom responsável pela mesa ");
+        System.out.println("11 - Relatório da quantidade de mesas que cada garçom está atendendo");
+        System.out.println("12 - Remove garcom ID");
+        System.out.println("13 - Atualiza situaçao mesa");
+        System.out.println("14 - Atualiza capacidade mesa");
+        System.out.println("15 - Atualiza garcon mesa");
+        System.out.println("16 - Cadatrar Garcom");
+        System.out.println("17 - Lista Garcom");
         System.out.println("0 - Sair");
     }
 
@@ -260,7 +266,7 @@ public class Main {
         if(validaSeIdGarcomExiste(idGarcom)){
         BD_Garcom.stream()
                 .filter(value->value.getIdGarcom().equals(idGarcom))
-                .forEach(Garcom::relatorioGarcom);
+                .forEach(Garcom::printMesas);
 
         }else {
             System.out.println("ID garcom nao existe");
@@ -289,6 +295,9 @@ public class Main {
         }
     }
 
+    private static void relatorioQuantidadeMesaGarcons() {
+        BD_Garcom.forEach(Garcom::relatorioGarcom);
+    }
 
     private static void atualizaSituacaoMesa() {
         System.out.println("Infrome numero mesa: ");

@@ -143,8 +143,11 @@ public class Garcom {
     }
 
     public void relatorioGarcom(){
+        System.out.println("-----Garcom-----");
+        System.out.println("Nome: "+this.nome);
+        System.out.println("ID: "+this.idGarcom);
         System.out.println("Numeros de Mesas responsavel: "+this.mesasResponsavel.size());
-        this.printMesas();
+        System.out.println("\n");
     }
 
 
