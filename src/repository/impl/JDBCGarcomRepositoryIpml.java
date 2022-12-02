@@ -37,7 +37,7 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
     @Override
     public boolean save(final String sql) {
         try {
-            return trtransactionInsert(sql);
+            return transactionInsert(sql);
         } catch (Exception e) {
             lancaErro(e.toString());
             return false;
@@ -81,7 +81,7 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
         final ResultSet resultSet = transactionSelect(sql);
         final ArrayList<Garcom> objects = new ArrayList<>();
         while (resultSet.next()){
-            final Garcom garcom = new Garcom();
+            Garcom garcom = new Garcom();
             garcom.setIdGarcom(resultSet.getLong("id_garcom"));
             garcom.setNome(resultSet.getString("nome"));
             garcom.setCpf(resultSet.getString("cpf"));
@@ -107,7 +107,7 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
     @Override
     public Optional<Garcom> findById(Long idGarcom){
         try {
-            final var sql = format("SELECT * FROM garcom WHERE id_garcom='%d';", idGarcom);
+            final var sql = format("SELECT * FROM garcom WHERE id_garcom=%d;", idGarcom);
             final ResultSet resultSet = transactionSelect(sql);
             final Integer tamanho = tamanhoResultSet(resultSet);
             if( tamanho == 1){
@@ -128,6 +128,7 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
 
                     if(!resultSet.next())break;
                 }
+                resultSet.close();
                 return Optional.of(garcom);
             }
 

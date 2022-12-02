@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 import static enun.TipoSexo.FEMININO;
 import static enun.TipoSexo.MASCULINO;
@@ -38,11 +39,11 @@ public class Menu extends LancaMensagem {
                     break;
                 }
                 case 2:{
-//                    removeMesa();
+                    removeMesa();
                     break;
                 }
                 case 3:{
-//                    buscaMesaNumero();
+                    buscaMesaNumero();
                     break;
                 }
                 case 4:{
@@ -160,6 +161,59 @@ public class Menu extends LancaMensagem {
             lancaErro("Numero mesa já sendo utilizada");
         }
     }
+
+
+    private  void removeMesa(){
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+
+        if (mesaRepository.findById(numeroMesa).isPresent()){
+            final boolean save = mesaRepository.deleteById(numeroMesa);
+            if(save)lancaSucesso("Mesa removida com sucesso");
+        }else{
+            lancaErro("Numero mesa nao existe");
+        }
+    }
+
+
+    private  void buscaMesaNumero(){
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+        final Optional<Mesa> mesa = mesaRepository.findById(numeroMesa);
+        if(mesa.isPresent()){
+
+
+            var pane = new JPanel();
+            pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("ID mesa: ").append(mesa.get().getIdMesa()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("capacidade maxima: ").append(mesa.get().getMaxCap()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("situacao: ").append(mesa.get().getSituacao()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("ID garcom: ").append(mesa.get().getIdGarcom()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+
+        }else{
+            lancaErro("Mesa n existe");
+        }
+
+
+    }
+
+
+
 
 
 

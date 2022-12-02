@@ -8,4 +8,6 @@ public interface MesaRepository {
     Optional<Mesa> findById(Integer numeroMesa);
 
     boolean save(String sql);
+
+    boolean deleteById(Integer numeroMesa);
 }

@@ -28,11 +28,7 @@ public class Mesa {
         this.maxCap = maxCap;
         this.idGarcom = idGarcom;
     }
-    public Mesa(Integer idMes, Integer maxCap) {
-        this.idMesa = idMes;
-        this.situacao = LIVRE;
-        this.maxCap = maxCap;
-    }
+
 
 
     public void setIdMesa(Integer idMesa) {
@@ -71,8 +67,8 @@ public class Mesa {
 
 
     public String generateInsert(){
-        if(this.idGarcom!=null){
-            return format("INSERT INTO mesa" +
+
+        return format("INSERT INTO mesa" +
                             "(id_mesa,situacao,max_cap,id_garcom)" +
                             "VALUES(%d,'%s',%d,%d);"
                     ,this.idMesa
@@ -80,14 +76,7 @@ public class Mesa {
                     ,this.maxCap
                     ,this.idGarcom);
 
-        }else{
-            return format("INSERT INTO mesa" +
-                            "(id_mesa,situacao,max_cap,id_garcom)" +
-                            "VALUES(%d,'%s',%d);"
-                    ,this.idMesa
-                    ,this.situacao.getValue()
-                    ,this.maxCap);
-        }
+
 
     }
 

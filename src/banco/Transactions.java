@@ -70,7 +70,7 @@ public class Transactions extends ConexaoBanco{
     }
 
 
-    public Boolean trtransactionInsert(final String sql){
+    public Boolean transactionInsert(final String sql){
         try {
             final int i = getConnection().createStatement().executeUpdate(sql);
             return i!=0;
@@ -94,5 +94,18 @@ public class Transactions extends ConexaoBanco{
             numLinhas ++;
         }
         return numLinhas;
+    }
+
+
+    public  Boolean transactionDelete(final String sql){
+        try {
+            final int i = getConnection().createStatement().executeUpdate(sql);
+            return i!=0;
+        }catch (SQLException e){
+            lancaErro(e.toString());
+            return false;
+        } finally{
+            closeConnection();
+        }
     }
 }

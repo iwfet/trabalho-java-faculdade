@@ -21,9 +21,9 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
 
 
     @Override
-    public Optional<Mesa> findById(Integer idGarcom){
+    public Optional<Mesa> findById(Integer ID){
         try {
-            final var sql = format("SELECT * FROM mesa WHERE id_mesa='%d';", idGarcom);
+            final var sql = format("SELECT * FROM mesa WHERE id_mesa=%d;", ID);
             final ResultSet resultSet = transactionSelect(sql);
             final Integer tamanho = tamanhoResultSet(resultSet);
             if(tamanho == 1){
@@ -36,12 +36,11 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
                         mesa.setSituacao(LIVRE);
                     } else if (resultSet.getString("situacao").equals(OCUPADO.getValue())) {
                         mesa.setSituacao(OCUPADO);
-                    }
-                    else if (resultSet.getString("situacao").equals(RESERVADO.getValue())) {
+                    } else if (resultSet.getString("situacao").equals(RESERVADO.getValue())) {
                         mesa.setSituacao(RESERVADO);
                     }
-                    if(!resultSet.next())break;
                 }
+
                 return Optional.of(mesa);
             }
         }catch (SQLException e) {
@@ -54,11 +53,17 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
     @Override
     public boolean save(final String sql) {
         try {
-            return trtransactionInsert(sql);
+            return transactionInsert(sql);
         } catch (Exception e) {
             lancaErro(e.toString());
             return false;
         }
 
+    }
+
+    @Override
+    public boolean deleteById(Integer ID) {
+        final var sql = format("DELETE FROM mesa WHERE id_mesa=%d;", ID);
+        return  transactionDelete(sql);
     }
 }
