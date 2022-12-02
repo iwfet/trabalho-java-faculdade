@@ -61,7 +61,7 @@ public class Start extends Transactions {
                         "\tid_mesa serial NOT NULL,\n" +
                         "\tsituacao varchar(10) NOT NULL,\n" +
                         "\tmax_cap int4 NOT NULL,\n" +
-                        "\tid_garcom integer NOT NULL,\n" +
+                        "\tid_garcom integer,\n" +
                         "\tCONSTRAINT mesa_pk PRIMARY KEY (id_mesa),\n" +
                         "\tCONSTRAINT mesa_fk FOREIGN KEY (id_garcom) REFERENCES public.garcom(id_garcom) \n" +
                         ");\n";

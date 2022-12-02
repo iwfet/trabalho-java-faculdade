@@ -4,6 +4,7 @@ import molde.Garcom;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface GarcomRepository {
 
@@ -14,4 +15,6 @@ public interface GarcomRepository {
     void save(Garcom garcom);
 
     List<Garcom> findAll() ;
+
+    Optional<Garcom> findById(Long idGarcom);
 }

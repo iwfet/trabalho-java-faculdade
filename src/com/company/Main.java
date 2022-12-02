@@ -8,24 +8,15 @@
 
 package com.company;
 
-import enun.TipoSexo;
-import enun.TipoSituacaoMesa;
-import molde.Garcom;
-import molde.Mesa;
 import repository.impl.JDBCGarcomRepositoryIpml;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import repository.impl.JDBCMesaRepositoryIpml;
 
 
 public class Main {
 
     public static void main(String[] args) {
         try{
-            new Menu(new JDBCGarcomRepositoryIpml()).menu();
+            new Menu(new JDBCGarcomRepositoryIpml(), new JDBCMesaRepositoryIpml()).menu();
         }catch (Throwable e ){
             e.printStackTrace();
         }

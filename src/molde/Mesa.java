@@ -1,23 +1,43 @@
 package molde;
 
 import enun.TipoSituacaoMesa;
+import utils.anotecion.Colum;
 
 import static enun.TipoSituacaoMesa.LIVRE;
+import static java.lang.String.format;
 
 public class Mesa {
-    final private Integer idMesa;
-    private TipoSituacaoMesa situacao;
-    private Integer maxCap;
-    private String idGarcom;
+    @Colum(name = "id_mesa")
+    private Integer idMesa;
 
-    public Mesa(Integer idMes, Integer maxCap, String idGarcom) {
+    @Colum(name = "situacao")
+    private TipoSituacaoMesa situacao;
+
+    @Colum(name = "max_cap")
+    private Integer maxCap;
+
+    @Colum(name = "id_garcom")
+    private Long idGarcom;
+
+
+    public Mesa() {super();}
+
+    public Mesa(Integer idMes, Integer maxCap, Long idGarcom) {
         this.idMesa = idMes;
         this.situacao = LIVRE;
         this.maxCap = maxCap;
         this.idGarcom = idGarcom;
     }
+    public Mesa(Integer idMes, Integer maxCap) {
+        this.idMesa = idMes;
+        this.situacao = LIVRE;
+        this.maxCap = maxCap;
+    }
 
 
+    public void setIdMesa(Integer idMesa) {
+        this.idMesa = idMesa;
+    }
 
     public Integer getIdMesa() {
         return idMesa;
@@ -39,32 +59,35 @@ public class Mesa {
         this.maxCap = maxCap;
     }
 
-    public String getIdGarcom() {
+    public Long getIdGarcom() {
         return idGarcom;
     }
 
 
-    public void setIdGarcom(String idGarcom) {
+    public void setIdGarcom(Long idGarcom) {
         this.idGarcom = idGarcom;
     }
 
-    public void getTudoPrint(){
-        System.out.println("---------MESA---------");
-        System.out.println("ID garcom: "+this.idGarcom);
-        System.out.println("Numero mesa: "+this.idMesa);
-        System.out.println("Capadidade maxima: "+this.maxCap);
-        System.out.println("Situaçao: "+this.situacao.getValue());
-        System.out.println("\n");
-    }
 
-    public void printDadosMaisGarcom(String nome){
-        System.out.println("---------MESA---------");
-        System.out.println("ID garcom: "+this.idGarcom);
-        System.out.println("Nome garcom: "+nome);
-        System.out.println("Numero mesa: "+this.idMesa);
-        System.out.println("Capadidade maxima: "+this.maxCap);
-        System.out.println("Situaçao: "+this.situacao.getValue());
-        System.out.println("\n");
+
+    public String generateInsert(){
+        if(this.idGarcom!=null){
+            return format("INSERT INTO mesa" +
+                            "(id_mesa,situacao,max_cap,id_garcom)" +
+                            "VALUES(%d,'%s',%d,%d);"
+                    ,this.idMesa
+                    ,this.situacao.getValue()
+                    ,this.maxCap
+                    ,this.idGarcom);
+
+        }else{
+            return format("INSERT INTO mesa" +
+                            "(id_mesa,situacao,max_cap,id_garcom)" +
+                            "VALUES(%d,'%s',%d);"
+                    ,this.idMesa
+                    ,this.situacao.getValue()
+                    ,this.maxCap);
+        }
 
     }
 

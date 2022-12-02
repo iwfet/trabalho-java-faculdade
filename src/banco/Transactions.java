@@ -21,7 +21,7 @@ public class Transactions extends ConexaoBanco{
         }
     }
 
-    public ResultSet transactionSelect(final String sql)throws SQLException{
+    public ResultSet transactionSelect(final String sql){
         try {
             return getConnection().prepareStatement(sql).executeQuery();
 
@@ -70,7 +70,7 @@ public class Transactions extends ConexaoBanco{
     }
 
 
-    public Boolean trtransactionInsert(final String sql)throws SQLException{
+    public Boolean trtransactionInsert(final String sql){
         try {
             final int i = getConnection().createStatement().executeUpdate(sql);
             return i!=0;
@@ -80,5 +80,19 @@ public class Transactions extends ConexaoBanco{
         } finally{
             closeConnection();
         }
+    }
+
+
+    public Integer tamanhoResultSet(ResultSet resultSet){
+        int numLinhas = 0;
+        while(true) {
+            try {
+                if (!resultSet.next()) break;
+            } catch (SQLException e) {
+                e.toString();
+            }
+            numLinhas ++;
+        }
+        return numLinhas;
     }
 }

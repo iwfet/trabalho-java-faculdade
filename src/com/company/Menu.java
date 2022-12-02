@@ -3,24 +3,28 @@ package com.company;
 import banco.Start;
 import enun.TipoSexo;
 import molde.Garcom;
+import molde.Mesa;
 import repository.GarcomRepository;
+import repository.MesaRepository;
 import utils.LancaMensagem;
 
 import javax.swing.*;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static enun.TipoSexo.FEMININO;
 import static enun.TipoSexo.MASCULINO;
-import static enun.TipoSexo.values;
 
 public class Menu extends LancaMensagem {
 
     private final GarcomRepository garcomRepository;
+    private final MesaRepository mesaRepository;
 
-    public Menu(GarcomRepository garcomRepository) {
+    public Menu(GarcomRepository garcomRepository, MesaRepository mesaRepository) {
         this.garcomRepository = garcomRepository;
+        this.mesaRepository = mesaRepository;
     }
 
     public void menu(){
@@ -141,27 +145,20 @@ public class Menu extends LancaMensagem {
 
 
 
-    private void cadastroMesa(){
-//        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
-//        if (!validaSeIdMesaExiste(numeroMesa)){
-//            var idGarcom = JOptionPane.showInputDialog("ID garcom");
-//            if(validaSeIdGarcomExiste(idGarcom)){
-//
-//                int capacidadeMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero capacidade mesa"));
-//                Mesa mesa = new Mesa(numeroMesa, capacidadeMesa, idGarcom);
-//                BD_Mesa.add(mesa);
-//                BD_Garcom.stream().filter(value->value.getIdGarcom().equals(idGarcom))
-//                        .forEach(garcom -> garcom.addMesaResponsavel(mesa));
-//
-//
-//
-//                lancaMensagem.lancaSucesso("Cadastrado");
-//            }else{
-//                lancaMensagem.lancaErro("ID Garcom n existe");
-//            }
-//        }else{
-//            lancaMensagem.lancaErro("Numero mesa já sendo utilizada");
-//        }
+    private void cadastroMesa()  {
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+        if (mesaRepository.findById(numeroMesa).isEmpty()){
+            var idGarcom = Long.parseLong(JOptionPane.showInputDialog("ID garcom"));
+            if(garcomRepository.findById(idGarcom).isPresent()){
+                int capacidadeMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero capacidade mesa"));
+                final boolean save = mesaRepository.save(new Mesa(numeroMesa, capacidadeMesa, idGarcom).generateInsert());
+                if(save)lancaSucesso("Cadastrado Mesa ");
+            }else{
+                lancaErro("ID Garcom n existe");
+            }
+        }else{
+            lancaErro("Numero mesa já sendo utilizada");
+        }
     }
 
 
