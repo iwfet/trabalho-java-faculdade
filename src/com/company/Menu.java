@@ -3,6 +3,7 @@ package com.company;
 import banco.Start;
 import dto.MesasLivreGarcomResponsavel;
 import enun.TipoSexo;
+import enun.TipoSituacaoMesa;
 import molde.Garcom;
 import molde.Mesa;
 import repository.GarcomRepository;
@@ -20,6 +21,9 @@ import java.util.Optional;
 
 import static enun.TipoSexo.FEMININO;
 import static enun.TipoSexo.MASCULINO;
+import static enun.TipoSituacaoMesa.LIVRE;
+import static enun.TipoSituacaoMesa.OCUPADO;
+import static enun.TipoSituacaoMesa.RESERVADO;
 
 public class Menu extends LancaMensagem {
 
@@ -90,15 +94,15 @@ public class Menu extends LancaMensagem {
                 }
 
                 case 13:{
-//                    atualizaSituacaoMesa();
+                    atualizaSituacaoMesa();
                     break;
                 }
                 case 14:{
-//                    atualizaCapacidadeMesa();
+                    atualizaCapacidadeMesa();
                     break;
                 }
                 case 15:{
-//                    atualizaGarcomMesa();
+                    atualizaGarcomMesa();
                     break;
                 }
 
@@ -349,6 +353,52 @@ public class Menu extends LancaMensagem {
     }
 
 
+
+    private void atualizaSituacaoMesa() {
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+        if (mesaRepository.findById(numeroMesa).isPresent()){
+            final var value = Integer.parseInt(JOptionPane.showInputDialog("Escolha a opção:" +
+                    "\n1 - Mesa livre " +
+                    "\n2 - Mesa ocupada " +
+                    "\n3 - Mesa reservada "
+            ));
+            if(value==1){
+                if(mesaRepository.atualizaSituacao(numeroMesa,LIVRE))lancaSucesso("Situacao Mesa atualizada");
+            }else if(value==2){
+                if(mesaRepository.atualizaSituacao(numeroMesa,OCUPADO))lancaSucesso("Situacao Mesa atualizada");
+            }else if(value==3){
+                if(mesaRepository.atualizaSituacao(numeroMesa,RESERVADO))lancaSucesso("Situacao Mesa atualizada");
+            }else{
+                lancaErro("Valor invalido");
+            }
+
+        }else{
+            lancaErro("Mesa n existe");
+        }
+    }
+    private void atualizaCapacidadeMesa() {
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+        if (mesaRepository.findById(numeroMesa).isPresent()){
+            var capacidade = Integer.parseInt(JOptionPane.showInputDialog("Nova capacidade de mesa"));
+            if(mesaRepository.atualizaCapacidade(numeroMesa,capacidade))lancaSucesso("Capacidade Mesa atualizada");
+        }else{
+            lancaErro("Mesa n existe");
+        }
+    }
+
+    private void atualizaGarcomMesa() {
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+        if (mesaRepository.findById(numeroMesa).isPresent()){
+            var idGarcom = Long.parseLong(JOptionPane.showInputDialog("ID garcom"));
+            if(garcomRepository.findById(idGarcom).isPresent()){
+                if(mesaRepository.atualizaGarcomResponsavel(numeroMesa,idGarcom))lancaSucesso("Garcom responsavel atualizado");
+            } else{
+                lancaErro("ID Garcom n existe");
+            }
+        }else{
+            lancaErro("Mesa n existe");
+        }
+    }
 
     private  void cadastroGracom(){
         final var nomeGarcom = JOptionPane.showInputDialog("Nome garcom");

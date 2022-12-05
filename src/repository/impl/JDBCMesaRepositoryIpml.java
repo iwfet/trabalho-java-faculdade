@@ -2,9 +2,7 @@ package repository.impl;
 
 import banco.Transactions;
 import dto.MesasLivreGarcomResponsavel;
-import enun.TipoSexo;
 import enun.TipoSituacaoMesa;
-import molde.Garcom;
 import molde.Mesa;
 import repository.MesaRepository;
 
@@ -221,6 +219,25 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
         }
         return null;
 
+    }
+
+    @Override
+    public boolean atualizaSituacao(int numeroMesa, TipoSituacaoMesa situacao) {
+        final var sql = format("UPDATE mesa SET situacao = '%s' where id_mesa= %d ;",situacao.getValue(), numeroMesa);
+        return transactionUpdate(sql);
+    }
+
+    @Override
+    public boolean atualizaCapacidade(int numeroMesa, int capacidade) {
+        final var sql = format("UPDATE mesa SET max_cap = %d where id_mesa= %d ;",capacidade, numeroMesa);
+        return transactionUpdate(sql);
+
+    }
+
+    @Override
+    public boolean atualizaGarcomResponsavel(int numeroMesa, long idGarcom) {
+        final var sql = format("UPDATE mesa SET id_garcom = %d where id_mesa= %d ;",idGarcom, numeroMesa);
+        return transactionUpdate(sql);
     }
 
 
