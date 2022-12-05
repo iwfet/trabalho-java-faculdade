@@ -1,5 +1,6 @@
 package repository;
 
+import dto.MesasLivreGarcomResponsavel;
 import molde.Mesa;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface MesaRepository {
     List<Mesa> buscaPorGarcomMesaOcupada(final Long idGarcom);
 
     List<Mesa> buscaMesasGarcom(long idGarcom);
+
+    List<MesasLivreGarcomResponsavel> buscaLivreMaisGarcom();
 }

@@ -1,6 +1,7 @@
 package com.company;
 
 import banco.Start;
+import dto.MesasLivreGarcomResponsavel;
 import enun.TipoSexo;
 import molde.Garcom;
 import molde.Mesa;
@@ -76,7 +77,7 @@ public class Menu extends LancaMensagem {
                     break;
                 }
                 case 10:{
-//                    relatorioMesaLivreEGarcom();
+                    relatorioMesaLivreEGarcom();
                     break;
                 }
                 case 11:{
@@ -115,6 +116,7 @@ public class Menu extends LancaMensagem {
             }
         }
     }
+
 
 
 
@@ -260,7 +262,6 @@ public class Menu extends LancaMensagem {
             List<Mesa> mesas = mesaRepository.buscaMesasGarcom(idGarcom);
             if(mesas.size()!=0){
                 visualizaDadosMesas(mesas);
-
             }else{
                 lancaErro("Garcom n tem mesa responsavel");
             }
@@ -271,6 +272,51 @@ public class Menu extends LancaMensagem {
 
 
     }
+
+
+
+    private void relatorioMesaLivreEGarcom() {
+        var pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        StringBuilder sb = new StringBuilder();
+
+        List<MesasLivreGarcomResponsavel> mesasLivreGarcomResponsavels = mesaRepository.buscaLivreMaisGarcom();
+        if(mesasLivreGarcomResponsavels.size()!= 0){
+
+            mesasLivreGarcomResponsavels.forEach((mesa)->{
+                sb.append("ID mesa: ").append(mesa.getIdMesa()).append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+                sb.append("capacidade maxima: ").append(mesa.getMaxCap()).append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+                sb.append("situacao: ").append(mesa.getSituacao()).append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+                sb.append("ID garcom: ").append(mesa.getIdGarcom()).append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+                sb.append("Nome garcom: ").append(mesa.getNome()).append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+                sb.append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+                sb.append("\n");
+                pane.add(new JLabel(sb.toString()));
+                sb.delete(0, sb.length());
+
+            });
+            JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+        }else{
+            lancaErro("No momento n existe mesas livre");
+        }
+
+
+    }
+
+
+
 
 
     private  void cadastroGracom(){

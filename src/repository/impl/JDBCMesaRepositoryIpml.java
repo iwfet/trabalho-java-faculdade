@@ -1,6 +1,7 @@
 package repository.impl;
 
 import banco.Transactions;
+import dto.MesasLivreGarcomResponsavel;
 import enun.TipoSexo;
 import enun.TipoSituacaoMesa;
 import molde.Garcom;
@@ -188,6 +189,38 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
 
         }
         return null;
+    }
+
+    @Override
+    public List<MesasLivreGarcomResponsavel> buscaLivreMaisGarcom() {
+        try {
+            final var sql = format("select m.*, g.nome  from  mesa m ,garcom g where g.id_garcom =m.id_garcom  and m.situacao = '%s' ;", LIVRE.getValue());
+            final ResultSet resultSet = transactionSelect(sql);
+            List<MesasLivreGarcomResponsavel> objects = new ArrayList<>();
+            while (resultSet.next()){
+                final var mesa = new MesasLivreGarcomResponsavel();
+                mesa.setIdMesa(resultSet.getInt("id_mesa"));
+                mesa.setMaxCap(resultSet.getInt("max_cap"));
+                mesa.setIdGarcom(resultSet.getLong("id_garcom"));
+                if (resultSet.getString("situacao").equals(LIVRE.getValue())) {
+                    mesa.setSituacao(LIVRE);
+                } else if (resultSet.getString("situacao").equals(OCUPADO.getValue())) {
+                    mesa.setSituacao(OCUPADO);
+                } else if (resultSet.getString("situacao").equals(RESERVADO.getValue())) {
+                    mesa.setSituacao(RESERVADO);
+                }
+                mesa.setNome(resultSet.getString("nome"));
+                objects.add(mesa);
+
+            }
+            return objects;
+
+        }catch (SQLException e) {
+            lancaErro(e.toString());
+
+        }
+        return null;
+
     }
 
 
