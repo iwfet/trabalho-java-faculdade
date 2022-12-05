@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,13 +57,14 @@ public class Menu extends LancaMensagem {
                     break;
                 }
                 case 6:{
-//                    relatorioGarcomMesaOcupada();
+                    relatorioGarcomMesaOcupada();
                     break;
                 }
 
                 case 7:{
-//                    buscarGarcomEmail();
+                    buscarGarcomEmail();
                     break;
+
                 }
                 case 8:{
 //                    buscaGarcomResponsavelMesa();
@@ -113,7 +115,6 @@ public class Menu extends LancaMensagem {
             }
         }
     }
-
 
 
 
@@ -182,31 +183,9 @@ public class Menu extends LancaMensagem {
         var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
         final Optional<Mesa> mesa = mesaRepository.findById(numeroMesa);
         if(mesa.isPresent()){
-
-
-            var pane = new JPanel();
-            pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
-            StringBuilder sb = new StringBuilder();
-
-            sb.append("ID mesa: ").append(mesa.get().getIdMesa()).append("\n");
-            pane.add(new JLabel(sb.toString()));
-            sb.delete(0, sb.length());
-            sb.append("capacidade maxima: ").append(mesa.get().getMaxCap()).append("\n");
-            pane.add(new JLabel(sb.toString()));
-            sb.delete(0, sb.length());
-            sb.append("situacao: ").append(mesa.get().getSituacao()).append("\n");
-            pane.add(new JLabel(sb.toString()));
-            sb.delete(0, sb.length());
-            sb.append("ID garcom: ").append(mesa.get().getIdGarcom()).append("\n");
-            pane.add(new JLabel(sb.toString()));
-            sb.delete(0, sb.length());
-            sb.append("\n");
-            pane.add(new JLabel(sb.toString()));
-            sb.delete(0, sb.length());
-            sb.append("\n");
-            pane.add(new JLabel(sb.toString()));
-            sb.delete(0, sb.length());
-            JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+            List<Mesa> objects = new ArrayList<>();
+            objects.add(mesa.get());
+            visualizaDadosMesas(objects);
 
         }else{
             lancaErro("Mesa n existe");
@@ -228,6 +207,26 @@ public class Menu extends LancaMensagem {
         visualizaDadosMesas(mesaRepository.findAll());
     }
 
+    private void relatorioGarcomMesaOcupada() {
+        var idGarcom = Long.parseLong(JOptionPane.showInputDialog("ID garcom"));
+        if(garcomRepository.findById(idGarcom).isPresent()){
+            final List<Mesa> mesas = mesaRepository.buscaPorGarcomMesaOcupada(idGarcom);
+            if(mesas.size() != 0){
+                visualizaDadosMesas(mesas);
+            }else{
+                lancaSucesso("Não existe mesas ocupadas para este garcom");
+            }
+        } else{
+        lancaErro("ID Garcom n existe");
+        }
+    }
+
+
+    private void buscarGarcomEmail() {
+        final var email = JOptionPane.showInputDialog("Email garcom");
+        garcomRepository.buscaEmail(email);
+
+    }
 
 
 

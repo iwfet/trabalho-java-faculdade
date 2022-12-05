@@ -15,4 +15,6 @@ public interface MesaRepository {
     List<Mesa> buscaCapacidade(final Integer capacidade);
 
     List<Mesa> findAll();
+
+    List<Mesa> buscaPorGarcomMesaOcupada(final Long idGarcom);
 }

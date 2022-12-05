@@ -138,5 +138,10 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
         return empty();
     }
 
+    @Override
+    public Optional<Garcom> buscaEmail(String email) {
+        return empty();
+    }
+
 
 }

@@ -17,4 +17,6 @@ public interface GarcomRepository {
     List<Garcom> findAll() ;
 
     Optional<Garcom> findById(Long idGarcom);
+
+    Optional<Garcom> buscaEmail(String email);
 }

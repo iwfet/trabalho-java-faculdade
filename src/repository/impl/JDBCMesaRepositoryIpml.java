@@ -70,7 +70,7 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
     }
 
     @Override
-    public List<Mesa> buscaCapacidade(final Integer capacidade) {
+    public List<Mesa> buscaCapacidade(Integer capacidade) {
         try {
         final var sql = format("SELECT * FROM mesa WHERE max_cap >=%d;", capacidade);
         final ResultSet resultSet = transactionSelect(sql);
@@ -129,4 +129,37 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
         }
         return null;
     }
+
+    @Override
+    public List<Mesa> buscaPorGarcomMesaOcupada(Long idGarcom) {
+        try {
+            final var sql = format("SELECT * FROM mesa WHERE id_garcom = %d AND situacao = '%s' ;",idGarcom,OCUPADO.getValue());
+            final ResultSet resultSet = transactionSelect(sql);
+            List<Mesa> objects = new ArrayList<>();
+            while (resultSet.next()){
+                final Mesa mesa = new Mesa();
+                mesa.setIdMesa(resultSet.getInt("id_mesa"));
+                mesa.setMaxCap(resultSet.getInt("max_cap"));
+                mesa.setIdGarcom(resultSet.getLong("id_garcom"));
+                if (resultSet.getString("situacao").equals(LIVRE.getValue())) {
+                    mesa.setSituacao(LIVRE);
+                } else if (resultSet.getString("situacao").equals(OCUPADO.getValue())) {
+                    mesa.setSituacao(OCUPADO);
+                } else if (resultSet.getString("situacao").equals(RESERVADO.getValue())) {
+                    mesa.setSituacao(RESERVADO);
+                }
+                objects.add(mesa);
+
+            }
+            return objects;
+
+        }catch (SQLException e) {
+            lancaErro(e.toString());
+
+        }
+        return null;
+    }
+
+
+
 }
