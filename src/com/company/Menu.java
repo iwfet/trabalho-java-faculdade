@@ -67,12 +67,12 @@ public class Menu extends LancaMensagem {
 
                 }
                 case 8:{
-//                    buscaGarcomResponsavelMesa();
+                    buscaGarcomResponsavelMesa();
                     break;
                 }
 
                 case 9:{
-//                    relatorioMesasGarcom();
+                    relatorioMesasGarcom();
                     break;
                 }
                 case 10:{
@@ -235,8 +235,42 @@ public class Menu extends LancaMensagem {
 
     }
 
+    private void buscaGarcomResponsavelMesa() {
+        var numeroMesa = Integer.parseInt(JOptionPane.showInputDialog("Numero mesa"));
+        if (mesaRepository.findById(numeroMesa).isPresent()){
+            Optional<Garcom> garcom = garcomRepository.buscaResponsavelMesa(numeroMesa);
+            if(garcom.isPresent()){
+                ArrayList<Garcom> objects = new ArrayList<>();
+                objects.add(garcom.get());
+                visualizaDadosGarcom(objects);
+
+            }else{
+                lancaErro("Mesa n tem garcom responsavel");
+            }
+
+        }else{
+            lancaErro("Mesa n existe");
+        }
+    }
 
 
+    private void relatorioMesasGarcom() {
+        var idGarcom = Long.parseLong(JOptionPane.showInputDialog("ID garcom"));
+        if(garcomRepository.findById(idGarcom).isPresent()){
+            List<Mesa> mesas = mesaRepository.buscaMesasGarcom(idGarcom);
+            if(mesas.size()!=0){
+                visualizaDadosMesas(mesas);
+
+            }else{
+                lancaErro("Garcom n tem mesa responsavel");
+            }
+
+        } else{
+            lancaErro("ID Garcom n existe");
+        }
+
+
+    }
 
 
     private  void cadastroGracom(){

@@ -21,4 +21,6 @@ public interface GarcomRepository {
     Optional<Garcom> buscaEmail(String email);
 
     Optional<Garcom> findByEmail(String email);
+
+    Optional<Garcom>  buscaResponsavelMesa(int numeroMesa);
 }

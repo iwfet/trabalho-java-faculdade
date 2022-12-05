@@ -17,4 +17,6 @@ public interface MesaRepository {
     List<Mesa> findAll();
 
     List<Mesa> buscaPorGarcomMesaOcupada(final Long idGarcom);
+
+    List<Mesa> buscaMesasGarcom(long idGarcom);
 }
