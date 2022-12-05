@@ -23,7 +23,7 @@ public class ConexaoBanco extends LancaMensagem{
                     url = "jdbc:postgresql://localhost:5432/faculdade";
                 }
                 String user = "postgres";
-                String password = "ADMINROOT";
+                String password = "KNY41iNV5";
 
                 connection = DriverManager.getConnection(url, user, password);
                 connection.setAutoCommit(false);

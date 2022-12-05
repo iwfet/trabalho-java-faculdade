@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,9 @@ public class Transactions extends ConexaoBanco{
 
     public ResultSet transactionSelect(final String sql){
         try {
-            return getConnection().prepareStatement(sql).executeQuery();
+            final Statement stmt = getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            return stmt.executeQuery(sql);
 
         }catch (SQLException e){
             lancaErro(e.toString());
@@ -84,16 +87,20 @@ public class Transactions extends ConexaoBanco{
 
 
     public Integer tamanhoResultSet(ResultSet resultSet){
-        int numLinhas = 0;
-        while(true) {
+
+        int size =0;
+        if (resultSet != null)
+        {
             try {
-                if (!resultSet.next()) break;
+                if(resultSet.last()) {
+                    size = resultSet.getRow();
+                    resultSet.beforeFirst();
+                }
             } catch (SQLException e) {
-                e.toString();
+                throw new RuntimeException(e);
             }
-            numLinhas ++;
         }
-        return numLinhas;
+        return size;
     }
 
 

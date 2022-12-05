@@ -128,7 +128,6 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
 
                     if(!resultSet.next())break;
                 }
-                resultSet.close();
                 return Optional.of(garcom);
             }
 

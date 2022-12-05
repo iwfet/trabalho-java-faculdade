@@ -32,6 +32,7 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
                      mesa.setIdMesa(resultSet.getInt("id_mesa"));
                      mesa.setMaxCap(resultSet.getInt("max_cap"));
                      mesa.setIdGarcom(resultSet.getLong("id_garcom"));
+
                     if (resultSet.getString("situacao").equals(LIVRE.getValue())) {
                         mesa.setSituacao(LIVRE);
                     } else if (resultSet.getString("situacao").equals(OCUPADO.getValue())) {
@@ -40,7 +41,6 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
                         mesa.setSituacao(RESERVADO);
                     }
                 }
-
                 return Optional.of(mesa);
             }
         }catch (SQLException e) {
