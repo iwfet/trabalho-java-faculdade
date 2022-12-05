@@ -1,24 +1,43 @@
 package molde;
 
 import enun.TipoSexo;
+import utils.anotecion.Colum;
 
-import javax.sound.midi.Soundbank;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static java.lang.String.format;
+
 public class Garcom {
-    private final String idGarcom;
+
+    @Colum(name="id_garcom")
+    private Long idGarcom;
+
+    @Colum(name = "nome")
     private String nome;
+
+    @Colum(name="cpf")
     private String cpf;
+
+    @Colum(name="data_nascimento")
     private Date dataNascimento;
+
+    @Colum(name="email")
     private String email;
+
+    @Colum(name="telefone")
     private String telefone;
+
+    @Colum(name="sexo")
     private TipoSexo sexo;
-    private Double salario;
-    private List<Mesa> mesasResponsavel;
 
+    @Colum(name="salario")
+    private Integer salario;
 
-    public Garcom(List<Garcom> garcom, String nome, String cpf, Date dataNascimento, String email, String telefone, TipoSexo sexo, Double salario) {
-        this.idGarcom = generateIdGarcom(garcom);
+    public Garcom() {
+        super();
+    }
+    public Garcom( String nome, String cpf, Date dataNascimento, String email, String telefone, TipoSexo sexo, Integer salario) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
@@ -26,13 +45,16 @@ public class Garcom {
         this.telefone = telefone;
         this.sexo = sexo;
         this.salario = salario;
-        this.mesasResponsavel = new ArrayList<>();
+
     }
 
-    public String getIdGarcom() {
+    public Long getIdGarcom() {
         return this.idGarcom;
     }
 
+    public void setIdGarcom(Long idGarcom) {
+        this.idGarcom = idGarcom;
+    }
 
     public String getNome() {
         return this.nome;
@@ -82,73 +104,56 @@ public class Garcom {
         this.sexo = sexo;
     }
 
-    public Double getSalario() {
+    public Integer getSalario() {
         return this.salario;
     }
 
-    public void setSalario(Double salario) {
+    public void setSalario(Integer salario) {
         this.salario = salario;
     }
 
-    public List<Mesa> getMesasResponsavel() {
-        return this.mesasResponsavel;
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Garcom garcom = (Garcom) o;
+        return Objects.equals(idGarcom, garcom.idGarcom);
     }
 
-    public void setMesasResponsavel(List<Mesa> mesasRsponsavel) {
-        this.mesasResponsavel = mesasRsponsavel;
-    }
-
-    public void addMesaResponsavel(Mesa mesa){
-        this.mesasResponsavel.add(mesa);
-
-    }
-
-    private String generateIdGarcom(List<Garcom> garcom){
-        while(true) {
-            String uuid =  UUID.randomUUID().toString().substring(0,6);
-            long count = garcom.stream().filter((value) -> Objects.equals(value.getIdGarcom(), uuid)).count();
-            if(count == 0){
-                System.out.println("ID garcom: "+uuid);
-                return  uuid;
-            }
-        }
-    }
-
-    public void removeMesa(final Integer idMesa){
-        for(int i = 0; i < this.mesasResponsavel.size(); i++){
-            Mesa p = this.mesasResponsavel.get(i);
-            if(p.getIdMesa().equals(idMesa)){this.mesasResponsavel.remove(p);break;}
-        }
-    }
-
-    public void printMesas(){
-        for (Mesa value : this.mesasResponsavel) {
-            value.getTudoPrint();
-        }
-    }
-
-    public void printGarcomIdNomeMesas(){
-        System.out.println("-----Garcom-----");
-        System.out.println("Nome: "+this.nome);
-        System.out.println("ID: "+this.idGarcom);
-        System.out.println("-----Responsavel por mesas-----");
-        this.printMesas();
+    @Override
+    public int hashCode() {
+        return Objects.hash(idGarcom);
     }
 
 
-    public void printNome(){
-        System.out.println("-----Garcom-----");
-        System.out.println("Nome: "+this.nome);
-        System.out.println("\n");
+
+
+
+    public String generateInsert(){
+
+        System.out.println(this.salario);
+        return format("INSERT INTO garcom" +
+                "(nome, cpf, data_nascimento, email, telefone, sexo, salario)" +
+                "VALUES('%s','%s','%s','%s','%s','%s',%d);"
+                ,this.nome
+                ,this.cpf
+                ,this.convetDateAndString()
+                ,this.email
+                ,this.telefone
+                ,this.sexo.getValue()
+                ,this.salario);
     }
 
-    public void relatorioGarcom(){
-        System.out.println("-----Garcom-----");
-        System.out.println("Nome: "+this.nome);
-        System.out.println("ID: "+this.idGarcom);
-        System.out.println("Numeros de Mesas responsavel: "+this.mesasResponsavel.size());
-        System.out.println("\n");
+    public String convetDateAndString(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(this.dataNascimento);
     }
+
+
+
 
 
 
