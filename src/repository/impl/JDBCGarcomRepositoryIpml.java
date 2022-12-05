@@ -140,6 +140,74 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
 
     @Override
     public Optional<Garcom> buscaEmail(String email) {
+        try {
+            final var sql = format("SELECT * FROM garcom WHERE email='%s';", email);
+            final ResultSet resultSet = transactionSelect(sql);
+            final Integer tamanho = tamanhoResultSet(resultSet);
+            if( tamanho == 1){
+                final Garcom garcom = new Garcom();
+                while (resultSet.next()) {
+                    garcom.setIdGarcom(resultSet.getLong("id_garcom"));
+                    garcom.setNome(resultSet.getString("nome"));
+                    garcom.setCpf(resultSet.getString("cpf"));
+                    garcom.setDataNascimento(resultSet.getDate("data_nascimento"));
+                    garcom.setEmail(resultSet.getString("email"));
+                    garcom.setTelefone(resultSet.getString("telefone"));
+                    if (resultSet.getString("sexo").equals(TipoSexo.MASCULINO.getValue())) {
+                        garcom.setSexo(TipoSexo.MASCULINO);
+                    } else if (resultSet.getString("sexo").equals(TipoSexo.FEMININO.getValue())) {
+                        garcom.setSexo(TipoSexo.FEMININO);
+                    }
+                    garcom.setSalario(resultSet.getInt("salario"));
+
+                    if(!resultSet.next())break;
+                }
+                return Optional.of(garcom);
+            }else {
+                empty();
+            }
+
+        }catch (SQLException e) {
+            lancaErro(e.toString());
+            return empty();
+        }
+        return empty();
+    }
+
+
+    @Override
+    public Optional<Garcom> findByEmail(String email) {
+        try {
+            final var sql = format("SELECT * FROM garcom WHERE email='%s';", email);
+            final ResultSet resultSet = transactionSelect(sql);
+            final Integer tamanho = tamanhoResultSet(resultSet);
+            if( tamanho == 1){
+                final Garcom garcom = new Garcom();
+                while (resultSet.next()) {
+                    garcom.setIdGarcom(resultSet.getLong("id_garcom"));
+                    garcom.setNome(resultSet.getString("nome"));
+                    garcom.setCpf(resultSet.getString("cpf"));
+                    garcom.setDataNascimento(resultSet.getDate("data_nascimento"));
+                    garcom.setEmail(resultSet.getString("email"));
+                    garcom.setTelefone(resultSet.getString("telefone"));
+                    if (resultSet.getString("sexo").equals(TipoSexo.MASCULINO.getValue())) {
+                        garcom.setSexo(TipoSexo.MASCULINO);
+                    } else if (resultSet.getString("sexo").equals(TipoSexo.FEMININO.getValue())) {
+                        garcom.setSexo(TipoSexo.FEMININO);
+                    }
+                    garcom.setSalario(resultSet.getInt("salario"));
+
+                    if(!resultSet.next())break;
+                }
+                return Optional.of(garcom);
+            }else {
+                empty();
+            }
+
+        }catch (SQLException e) {
+            lancaErro(e.toString());
+            return empty();
+        }
         return empty();
     }
 

@@ -224,7 +224,14 @@ public class Menu extends LancaMensagem {
 
     private void buscarGarcomEmail() {
         final var email = JOptionPane.showInputDialog("Email garcom");
-        garcomRepository.buscaEmail(email);
+        Optional<Garcom> garcom = garcomRepository.buscaEmail(email);
+        if(garcom.isPresent()) {
+            ArrayList<Garcom> objects = new ArrayList<>();
+            objects.add(garcom.get());
+            visualizaDadosGarcom(objects);
+        }else {
+            lancaErro("Não exite garocm com este email");
+        }
 
     }
 
@@ -245,24 +252,28 @@ public class Menu extends LancaMensagem {
                 lancaErro(e.toString());
             }
             final var email = JOptionPane.showInputDialog("Email garcom");
-            final String telefone = JOptionPane.showInputDialog("Telefone garcom");
-            final var value =Integer.parseInt(JOptionPane.showInputDialog("Sexo garcom"+
-                    "\n1 - Masculino "+"\n2 - Feminino"));
-            TipoSexo sexo = null;
-            if(value==1){
-                sexo=MASCULINO;
-            }else if(value ==2){
-                sexo=FEMININO;
-            }
+            if(garcomRepository.findByEmail(email).isEmpty()) {
+                final String telefone = JOptionPane.showInputDialog("Telefone garcom");
+                final var value = Integer.parseInt(JOptionPane.showInputDialog("Sexo garcom" +
+                        "\n1 - Masculino " + "\n2 - Feminino"));
+                TipoSexo sexo = null;
+                if (value == 1) {
+                    sexo = MASCULINO;
+                } else if (value == 2) {
+                    sexo = FEMININO;
+                }
 
-            if(sexo != null) {
-                Integer salario = Integer.parseInt(JOptionPane.showInputDialog("Salario garcom sem os centavos"));
+                if (sexo != null) {
+                    Integer salario = Integer.parseInt(JOptionPane.showInputDialog("Salario garcom sem os centavos"));
 
-                final boolean save = garcomRepository.save(new Garcom(nomeGarcom, cpf, date, email, telefone, sexo, salario).generateInsert());
-                if(save)lancaSucesso("Cadastrado garcom ");
+                    final boolean save = garcomRepository.save(new Garcom(nomeGarcom, cpf, date, email, telefone, sexo, salario).generateInsert());
+                    if (save) lancaSucesso("Cadastrado garcom ");
 
-            }else{
-                lancaErro("Erro ao cadastar sexo n valido");
+                } else {
+                    lancaErro("Erro ao cadastar sexo n valido");
+                }
+            }else {
+                lancaErro("garcom já exite com este email");
             }
         }else{
             lancaErro("garcom já exite com este cpf");
@@ -273,49 +284,8 @@ public class Menu extends LancaMensagem {
 
 
     private  void listaGarcom(){
-        var pane = new JPanel();
-        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
-        StringBuilder sb = new StringBuilder();
+     visualizaDadosGarcom(garcomRepository.findAll());
 
-        sb.append("-----GARCOMS-----\n");
-        pane.add(new JLabel(sb.toString()));
-        sb.delete(0, sb.length());
-       garcomRepository.findAll().forEach((value)->{
-
-           sb.append("IdGarcom: ").append(value.getIdGarcom()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("nome: ").append(value.getNome()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("cpf: ").append(value.getCpf()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("data_nascimento: ").append(value.convetDateAndString()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("email: ").append(value.getEmail()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("telefone: ").append(value.getTelefone()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("sexo: ").append(value.getSexo()).append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("salario: ").append(value.getSalario());
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-           sb.append("\n");
-           pane.add(new JLabel(sb.toString()));
-           sb.delete(0, sb.length());
-
-
-       });
-        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
     }
 
 
@@ -348,6 +318,53 @@ public class Menu extends LancaMensagem {
             sb.delete(0, sb.length());
         }));
         JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void visualizaDadosGarcom(final List<Garcom> garcoms){
+        var pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("-----GARCOMS-----\n");
+        pane.add(new JLabel(sb.toString()));
+        sb.delete(0, sb.length());
+        garcoms.forEach((value)->{
+
+            sb.append("IdGarcom: ").append(value.getIdGarcom()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("nome: ").append(value.getNome()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("cpf: ").append(value.getCpf()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("data_nascimento: ").append(value.convetDateAndString()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("email: ").append(value.getEmail()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("telefone: ").append(value.getTelefone()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("sexo: ").append(value.getSexo()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("salario: ").append(value.getSalario());
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+
+
+        });
+        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+
     }
 
 

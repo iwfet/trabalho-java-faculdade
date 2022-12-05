@@ -19,4 +19,6 @@ public interface GarcomRepository {
     Optional<Garcom> findById(Long idGarcom);
 
     Optional<Garcom> buscaEmail(String email);
+
+    Optional<Garcom> findByEmail(String email);
 }
