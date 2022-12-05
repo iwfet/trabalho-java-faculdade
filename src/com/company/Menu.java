@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static enun.TipoSexo.FEMININO;
@@ -47,11 +48,11 @@ public class Menu extends LancaMensagem {
                     break;
                 }
                 case 4:{
-//                    buscaMesaCapacidade();
+                    buscaMesaCapacidade();
                     break;
                 }
                 case 5:{
-//                    relatorioMesaTodas();
+                    relatorioMesaTodas();
                     break;
                 }
                 case 6:{
@@ -112,6 +113,8 @@ public class Menu extends LancaMensagem {
             }
         }
     }
+
+
 
 
     private int mostraMenu() {
@@ -215,6 +218,17 @@ public class Menu extends LancaMensagem {
 
 
 
+    private void buscaMesaCapacidade() {
+        var capacidade = Integer.parseInt(JOptionPane.showInputDialog("Digite a capacidade de pessoas desejadas em uma mesa"));
+       visualizaDadosMesas(mesaRepository.buscaCapacidade(capacidade));
+
+    }
+
+    private void relatorioMesaTodas() {
+        visualizaDadosMesas(mesaRepository.findAll());
+    }
+
+
 
 
 
@@ -307,6 +321,35 @@ public class Menu extends LancaMensagem {
 
 
 
+
+
+
+    private void visualizaDadosMesas(final List<Mesa> mesas){
+        var pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        StringBuilder sb = new StringBuilder();
+        mesas.forEach((mesa -> {
+            sb.append("ID mesa: ").append(mesa.getIdMesa()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("capacidade maxima: ").append(mesa.getMaxCap()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("situacao: ").append(mesa.getSituacao()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("ID garcom: ").append(mesa.getIdGarcom()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+        }));
+        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+    }
 
 
 

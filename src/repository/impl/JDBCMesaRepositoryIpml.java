@@ -9,6 +9,8 @@ import repository.MesaRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static enun.TipoSituacaoMesa.LIVRE;
@@ -65,5 +67,66 @@ public class JDBCMesaRepositoryIpml extends Transactions implements MesaReposito
     public boolean deleteById(Integer ID) {
         final var sql = format("DELETE FROM mesa WHERE id_mesa=%d;", ID);
         return  transactionDelete(sql);
+    }
+
+    @Override
+    public List<Mesa> buscaCapacidade(final Integer capacidade) {
+        try {
+        final var sql = format("SELECT * FROM mesa WHERE max_cap >=%d;", capacidade);
+        final ResultSet resultSet = transactionSelect(sql);
+        List<Mesa> objects = new ArrayList<>();
+        while (resultSet.next()){
+            final Mesa mesa = new Mesa();
+            mesa.setIdMesa(resultSet.getInt("id_mesa"));
+            mesa.setMaxCap(resultSet.getInt("max_cap"));
+            mesa.setIdGarcom(resultSet.getLong("id_garcom"));
+            if (resultSet.getString("situacao").equals(LIVRE.getValue())) {
+                mesa.setSituacao(LIVRE);
+            } else if (resultSet.getString("situacao").equals(OCUPADO.getValue())) {
+                mesa.setSituacao(OCUPADO);
+            } else if (resultSet.getString("situacao").equals(RESERVADO.getValue())) {
+                mesa.setSituacao(RESERVADO);
+            }
+            objects.add(mesa);
+
+        }
+        return objects;
+
+        }catch (SQLException e) {
+            lancaErro(e.toString());
+
+        }
+        return null;
+    }
+
+    @Override
+    public List<Mesa> findAll() {
+
+        try {
+            final var sql = "SELECT * FROM mesa ;";
+            final ResultSet resultSet = transactionSelect(sql);
+            List<Mesa> objects = new ArrayList<>();
+            while (resultSet.next()){
+                final Mesa mesa = new Mesa();
+                mesa.setIdMesa(resultSet.getInt("id_mesa"));
+                mesa.setMaxCap(resultSet.getInt("max_cap"));
+                mesa.setIdGarcom(resultSet.getLong("id_garcom"));
+                if (resultSet.getString("situacao").equals(LIVRE.getValue())) {
+                    mesa.setSituacao(LIVRE);
+                } else if (resultSet.getString("situacao").equals(OCUPADO.getValue())) {
+                    mesa.setSituacao(OCUPADO);
+                } else if (resultSet.getString("situacao").equals(RESERVADO.getValue())) {
+                    mesa.setSituacao(RESERVADO);
+                }
+                objects.add(mesa);
+
+            }
+            return objects;
+
+        }catch (SQLException e) {
+            lancaErro(e.toString());
+
+        }
+        return null;
     }
 }

@@ -2,12 +2,17 @@ package repository;
 
 import molde.Mesa;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MesaRepository {
-    Optional<Mesa> findById(Integer numeroMesa);
+    Optional<Mesa> findById(final Integer numeroMesa);
 
-    boolean save(String sql);
+    boolean save(final String sql);
 
-    boolean deleteById(Integer numeroMesa);
+    boolean deleteById(final Integer numeroMesa);
+
+    List<Mesa> buscaCapacidade(final Integer capacidade);
+
+    List<Mesa> findAll();
 }
