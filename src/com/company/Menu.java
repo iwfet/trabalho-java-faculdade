@@ -81,11 +81,11 @@ public class Menu extends LancaMensagem {
                     break;
                 }
                 case 11:{
-//                    relatorioQuantidadeMesaGarcons();
+                    relatorioQuantidadeMesaGarcons();
                     break;
                 }
                 case 12:{
-//                    removerGarcom();
+                    removerGarcom();
                     break;
                 }
 
@@ -316,6 +316,37 @@ public class Menu extends LancaMensagem {
     }
 
 
+    private void relatorioQuantidadeMesaGarcons() {
+        var pane = new JPanel();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        StringBuilder sb = new StringBuilder();
+        garcomRepository.qauntidadeMesas().forEach((mesa)->{
+            sb.append("nome Garcom: ").append(mesa.getNome()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("Quantidades mesas garcom atende: ").append(mesa.getQauntidade()).append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+            sb.append("\n");
+            pane.add(new JLabel(sb.toString()));
+            sb.delete(0, sb.length());
+
+        });
+        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void removerGarcom() {
+        var idGarcom = Long.parseLong(JOptionPane.showInputDialog("ID garcom"));
+        if(garcomRepository.findById(idGarcom).isPresent()){
+            Boolean delete = garcomRepository.deleteById(idGarcom);
+            if(delete)lancaSucesso("Garcom removida com sucesso");
+        } else{
+            lancaErro("ID Garcom n existe");
+        }
+    }
 
 
 

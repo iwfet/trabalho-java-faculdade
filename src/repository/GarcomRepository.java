@@ -1,5 +1,6 @@
 package repository;
 
+import dto.QuantidadeMesasGarcom;
 import molde.Garcom;
 
 import java.sql.SQLException;
@@ -23,4 +24,8 @@ public interface GarcomRepository {
     Optional<Garcom> findByEmail(String email);
 
     Optional<Garcom>  buscaResponsavelMesa(int numeroMesa);
+
+    List<QuantidadeMesasGarcom> qauntidadeMesas();
+
+    Boolean deleteById(long idGarcom);
 }

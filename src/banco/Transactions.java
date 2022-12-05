@@ -115,4 +115,18 @@ public class Transactions extends ConexaoBanco{
             closeConnection();
         }
     }
+
+
+
+    public Boolean transactionUpdate(final String sql){
+        try {
+            final int i = getConnection().createStatement().executeUpdate(sql);
+            return i!=0;
+        }catch (SQLException e){
+            lancaErro(e.toString());
+            return false;
+        } finally{
+            closeConnection();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package repository.impl;
 
 import banco.Transactions;
+import dto.QuantidadeMesasGarcom;
 import enun.TipoSexo;
 import molde.Garcom;
 import repository.GarcomRepository;
@@ -242,6 +243,36 @@ public class JDBCGarcomRepositoryIpml extends Transactions implements GarcomRepo
             return empty();
         }
         return empty();
+
+    }
+
+    @Override
+    public List<QuantidadeMesasGarcom> qauntidadeMesas() {
+        try {
+            final var sql = "SELECT g.nome,(SELECT count(*) FROM mesa m WHERE  m.id_garcom  = g.id_garcom)as quantidade FROM garcom g ;";
+            final ResultSet resultSet = transactionSelect(sql);
+            final ArrayList<QuantidadeMesasGarcom> objects = new ArrayList<>();
+            while (resultSet.next()){
+                final var  garcom = new QuantidadeMesasGarcom();
+                garcom.setNome(resultSet.getString("nome"));
+                garcom.setQauntidade(resultSet.getLong("quantidade"));
+
+                objects.add(garcom);
+            }
+
+            return objects;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean deleteById(long idGarcom) {
+        final var sql1 = format("UPDATE mesa SET id_garcom = null where id_garcom= %d ;",idGarcom);
+        transactionUpdate(sql1);
+        final var sql = format("DELETE FROM garcom WHERE id_garcom=%d ;",idGarcom);
+        return transactionDelete(sql);
 
     }
 
