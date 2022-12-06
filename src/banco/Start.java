@@ -35,11 +35,6 @@ public class Start extends Transactions {
                         "\tCONSTRAINT garcom_pk PRIMARY KEY (id_garcom),\n" +
                         "\tCONSTRAINT garcom_un UNIQUE (cpf)\n" +
                         ");\n";
-
-
-
-
-
                 try {
                     transactionCreateTable(sqlCreateTable);
                 } catch (SQLException e) {

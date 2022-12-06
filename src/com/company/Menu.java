@@ -311,7 +311,7 @@ public class Menu extends LancaMensagem {
                 sb.delete(0, sb.length());
 
             });
-            JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), pane, "relatorioMesaLivreEGarcom", JOptionPane.PLAIN_MESSAGE);
         }else{
             lancaErro("No momento n existe mesas livre");
         }
@@ -339,7 +339,7 @@ public class Menu extends LancaMensagem {
             sb.delete(0, sb.length());
 
         });
-        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(new JFrame(), pane, "relatorioQuantidadeMesaGarcons", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void removerGarcom() {
@@ -478,7 +478,7 @@ public class Menu extends LancaMensagem {
             pane.add(new JLabel(sb.toString()));
             sb.delete(0, sb.length());
         }));
-        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(new JFrame(), pane, "Mesas", JOptionPane.PLAIN_MESSAGE);
     }
 
     private void visualizaDadosGarcom(final List<Garcom> garcoms){
@@ -486,7 +486,7 @@ public class Menu extends LancaMensagem {
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
         StringBuilder sb = new StringBuilder();
 
-        sb.append("-----GARCOMS-----\n");
+        sb.append("-----GARCONS-----\n");
         pane.add(new JLabel(sb.toString()));
         sb.delete(0, sb.length());
         garcoms.forEach((value)->{
@@ -524,7 +524,7 @@ public class Menu extends LancaMensagem {
 
 
         });
-        JOptionPane.showMessageDialog(new JFrame(), pane, "Numbers", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(new JFrame(), pane, "Garcons", JOptionPane.PLAIN_MESSAGE);
 
     }
 
